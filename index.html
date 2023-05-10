@@ -11,7 +11,7 @@
     <div style="text-align: center;">
   <p>下記フォームを全て埋めて送信してください</p>
 </div>
-    <form class="w-75 mx-auto">
+    <form class="w-75 mx-auto" id="form" enctype="multipart/form-data">
 
         <p class="mt-3">部署</p>
         <div>
@@ -19,7 +19,7 @@
         </div>
         <p class="mt-3">名前</p>
         <div>
-           <input class="form-control w-100 mt-1" name="maker" placeholder="金村　洋平" required>
+           <input class="form-control w-100 mt-1" name="name" placeholder="金村　洋平" required>
         </div>
         <p class="mt-3">メーカー</p>
         <div>
@@ -41,11 +41,13 @@
         <div>
             <input class="form-control w-100 mt-1" name="genba" placeholder="使用する予定の現場名" required>
         </div>
+        <p class="mt-3"> 画像</p>
+        <div>
+        <input type="file" name="image" accept="image/*" capture="camera">
+        </div>    
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
-    <form id="form" enctype="multipart/form-data">
-  <input type="file" name="image" accept="image/*" capture="camera">
-</form>
+   
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
