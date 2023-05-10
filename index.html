@@ -85,19 +85,19 @@
         const key = params.get('key');
 
         $(function () {
-            $('form').submit(function () {
-                const busyo    = $('input[name="busyo"]').val();
-                const name    = $('input[name="name"]').val();
-                const maker = $('input[name="maker"]').val();
-                const kisyu  = $('input[name="kisyu"]').val();
-                const kataban  = $('input[name="kataban"]').val();
-                const buhinmei = $('input[name="buhinmei"]').val();
-                const genba = $('input[name="genba"]').val();
-                const msg = `${busyo}\n${name}\n${maker}\n${kisyu}\n${kataban}\n${buhinmei}\n${genba}`;
-                sendText(msg);
-                return false;
-            });
-        });
+  $('form').submit(function () {
+    const busyo    = $('input[name="busyo"]').val();
+    const name    = $('select[name="name"]').val();
+    const maker = $('input[name="maker"]').val();
+    const kisyu  = $('input[name="kisyu"]').val();
+    const kataban  = $('input[name="kataban"]').val();
+    const buhinmei = $('input[name="buhinmei"]').val();
+    const genba = $('input[name="genba"]').val();
+    const msg = `${busyo}\n${name}\n${maker}\n${kisyu}\n${kataban}\n${buhinmei}\n${genba}`;
+    sendText(msg);
+    return false;
+  });
+});
 
     </script>
 
