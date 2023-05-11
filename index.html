@@ -43,7 +43,7 @@
         </div>
 	 <p class="mt-3">画像</p>
         <div>    
-  　　　　　　 <input type="file" id="file-upload" name="file" accept="image/*" placeholder="ファイルを添付してください">
+  　　　　　　 <input type="file" id="file-upload" name="file-upload" accept="image/*" placeholder="ファイルを添付してください">
 　　　　 </div>
 
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
@@ -86,8 +86,9 @@
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
 
-        $(function () {
+       $(function () {
   $('form').submit(function () {
+    // テキスト情報を取得する
     const busyo    = $('input[name="busyo"]').val();
     const name    = $('input[name="name"]').val();
     const maker = $('input[name="maker"]').val();
@@ -96,10 +97,34 @@
     const buhinmei = $('input[name="buhinmei"]').val();
     const genba = $('input[name="genba"]').val();
     const msg = `${busyo}\n${name}\n${maker}\n${kisyu}\n${kataban}\n${buhinmei}\n${genba}`;
-    sendText(msg);
+
+    // ファイルを取得する
+    const fileInput = document.getElementById('file-upload');
+    const file = fileInput.files[0];
+
+    // FormDataオブジェクトを作成する
+    const formData = new FormData();
+    formData.append('message', msg);
+    formData.append('imageFile', file);
+
+    // LINEメッセージを送信する
+    liff.sendMessages([{
+      'type': 'image',
+      'originalContentUrl': 'https://example.com/original.jpg',
+      'previewImageUrl': 'https://example.com/preview.jpg'
+    },{
+      'type': 'text',
+      'text': msg
+    }]).then(function () {
+      liff.closeWindow();
+    }).catch(function (error) {
+      window.alert('Failed to send message ' + error);
+    });
+
     return false;
   });
 });
+
 // フォーム送信前に呼び出される関数
   function validateForm() {
     // ファイルが選択されているかどうかを確認する
