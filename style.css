@@ -1,0 +1,15 @@
+.check input[type="file"]{
+  display: none;
+}
+
+.check input[type="file"] + span {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 5vw;
+  box-sizing: border-box;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  background: #fff;
+  line-height: 1.4;
+}
