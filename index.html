@@ -75,12 +75,7 @@
 }
 
    
-	    
-	
-    
-	    
-	    
-	    
+	   
 
         function initializeLiff(liffId) {
             liff.init({
@@ -122,24 +117,6 @@
 
  
 
-    // FormDataオブジェクトを作成する
-    const formData = new FormData();
-    formData.append('message', msg);
-    formData.append('imageFile', file);
-
-    // LINEメッセージを送信する
-    liff.sendMessages([{
-      'type': 'image',
-      'originalContentUrl': 'https://example.com/original.jpg',
-      'previewImageUrl': 'https://example.com/preview.jpg'
-    },{
-      'type': 'text',
-      'text': msg
-    }]).then(function () {
-      liff.closeWindow();
-    }).catch(function (error) {
-      window.alert('Failed to send message ' + error);
-    });
 
     return false;
   });
