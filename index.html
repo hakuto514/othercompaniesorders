@@ -48,7 +48,7 @@
          </div>
 
         
-	 <input type="submit" class="mt-4 btn btn-primary" value="送信" onclick="sendImage()">
+	 <input type="submit" class="mt-4 btn btn-primary" value="送信" >
 
     </form>
    
@@ -84,32 +84,24 @@
             });
         }
 
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
+        function sendMessages(text, image) {
+  liff.sendMessages([{
+    'type': 'image',
+    'originalContentUrl': image,
+    'previewImageUrl': image
+  },
+  {
+    'type': 'text',
+    'text': text
+  }
+  ]).then(function () {
+    liff.closeWindow();
+  }).catch(function (error) {
+    window.alert('Failed to send message ' + error);
             });
         }
 	    
-	    
-	    function sendImage() {
-    const image = document.getElementById('preview');
-    const formData = new FormData();
-    formData.append('image', image.src);
-    liff.sendMessages([{
-        'type': 'image',
-        'originalContentUrl': image.src,
-        'previewImageUrl': image.src
-    }]).then(function () {
-        liff.closeWindow();
-    }).catch(function (error) {
-        window.alert('Failed to send message ' + error);
-    });
-}
+	  
 
 
         const params = (new URL(document.location)).searchParams;
