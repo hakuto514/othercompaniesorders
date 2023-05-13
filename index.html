@@ -65,14 +65,20 @@
             initializeLiff(liffId);
         })
 	    
+	 
+	
 	function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-        var img = document.getElementById('preview');
-        img.src = event.target.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-        }    
+  　　　　var file = event.target.files[0];
+  　　　　var reader = new FileReader();
+  　　　　reader.onload = function(event) {
+    　　　var img = document.getElementById('preview');
+    　　　img.src = event.target.result;
+  　　　　};
+  　　　　reader.readAsDataURL(file);
+　　　　　}    
+	    
+	    
+	    
 
         function initializeLiff(liffId) {
             liff.init({
