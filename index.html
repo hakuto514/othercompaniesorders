@@ -66,16 +66,39 @@
         })
 	    
 	 
-	
+   
+	    
 	function previewImage(event) {
-  　　　　var file = event.target.files[0];
-  　　　　var reader = new FileReader();
-  　　　　reader.onload = function(event) {
-    　　　var img = document.getElementById('preview');
-    　　　img.src = event.target.result;
-  　　　　};
-  　　　　reader.readAsDataURL(file);
-　　　　　}    
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var img = document.getElementById('preview');
+        img.src = event.target.result;
+
+        // 画像ファイルをBase64エンコード
+        var base64 = event.target.result.replace(/^.*,/, '');
+
+        // LIFFのsendMessages()で送信するための形式に変換
+        var messages = [{
+            type: "image",
+            originalContentUrl: "https://example.com/original.jpg",
+            previewImageUrl: "https://example.com/preview.jpg"
+        }];
+        messages[0].originalContentUrl = "data:image/jpeg;base64," + base64;
+        messages[0].previewImageUrl = "data:image/jpeg;base64," + base64;
+
+        // LIFFのsendMessages()でメッセージを送信
+        liff.sendMessages(messages)
+            .then(() => {
+                liff.closeWindow();
+            })
+            .catch((error) => {
+                window.alert('Failed to send message ' + error);
+            });
+    };
+    reader.readAsDataURL(file);
+}
+    
 	    
 	    
 	    
