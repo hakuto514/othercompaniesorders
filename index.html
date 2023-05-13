@@ -95,6 +95,20 @@
             });
         }
 	    
+function sendImage(imageUrl) {
+  liff.sendMessages([{
+    type: "image",
+    originalContentUrl: imageUrl,
+    previewImageUrl: imageUrl
+  }]).then(function () {
+    liff.closeWindow();
+  }).catch(function (error) {
+    window.alert('Failed to send message ' + error);
+  });
+}
+	    
+
+	    
 	  
 
 
@@ -113,9 +127,18 @@
     const genba = $('input[name="genba"]').val();
     const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${kataban}\n${buhinmei}\n${genba}`;
 
-    // ファイルを取得する
-    const fileInput = document.getElementById('file-upload');
-    const file = fileInput.files[0];
+    // 画像を取得する
+    const file = $('#file-upload').prop('files')[0];
+    var imageUrl = '';
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        imageUrl = event.target.result;
+        sendImage(imageUrl); // 画像を送信する
+      };
+      reader.readAsDataURL(file);
+      return false;
+    }
 
     // FormDataオブジェクトを作成する
     const formData = new FormData();
