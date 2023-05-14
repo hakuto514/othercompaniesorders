@@ -81,7 +81,7 @@
                 const temperature  = $('input[name="temperature"]').val();
                 const shushoujou  = $('input[name="shushoujou"]').val();
                 const family = $('input[name="family"]').val();
-                const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}`;
+                const msg = `【送信内容】\n${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}`;
                 sendText(msg);
                 return false;
             });
