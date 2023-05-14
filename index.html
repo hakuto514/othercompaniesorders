@@ -30,10 +30,11 @@
             <input class="form-control w-100 mt-1" name="shushoujou" required>
         </div>
         <div>
-        <p class="mt-3"　required>家族に発熱などの症状のある人がいる</p>
-        <input id="radio-a" type="radio" name="family" value="はい" checked><label for="radio-a">はい</label>
-        <input id="radio-b" type="radio" name="family" value="いいえ"><label for="radio-b">いいえ</label>
-    </div>
+  <p class="mt-3">家族に発熱などの症状のある人がいる</p>
+  <input id="radio-a" type="radio" name="family" value="はい" checked required><label for="radio-a">はい</label>
+  <input id="radio-b" type="radio" name="family" value="いいえ" required><label for="radio-b">いいえ</label>
+</div>
+
        
         <input type="submit" class="mt-4 btn btn-primary" value="連絡する">
     </form>
@@ -80,7 +81,7 @@
                 const bangou = $('input[name="bangou"]').val();
                 const temperature  = $('input[name="temperature"]').val();
                 const shushoujou  = $('input[name="shushoujou"]').val();
-                const family = $('input[name="family"]').val();
+                const family = $('input[name="family"]:checked').val();
                 const msg = `【送信内容】\n${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}`;
                 sendText(msg);
                 return false;
