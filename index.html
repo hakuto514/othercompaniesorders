@@ -11,7 +11,7 @@
 <body>
     <p class="text-center">【支援依頼フォーム】</p>
     <p class="text-center">下記空欄を入力をして、送信してください</p>
-    <form class="w-75 mx-auto"　onSubmit="return checkSubmit()">
+    <form class="w-75 mx-auto">
         <p class="mt-3">部署</p>
         <div>
             <input class="form-control" name="busyo" placeholder="例）鳥取" required>                                                                                                                      
@@ -98,9 +98,7 @@
                 return false;
             });
         });
-        function checkSubmit() {
-	return confirm("送信しても良いですか？");
-}
+        
 
     </script>
 
