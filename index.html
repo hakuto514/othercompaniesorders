@@ -41,13 +41,7 @@
        <p class="mt-3">備考</p>
         <div>
             <input class="form-control w-100 mt-1 h-25" name="bikou" placeholder="仕様や製品番号、ガス種など">                                                                                                                     
-        </div> 
-        
-          <p class="mt-3">画像</p>
-  <div>
-    <input class="form-control w-100 mt-1" name="image" type="file" accept="image/*">
-  </div>
-
+        </div>                                                                            
 
 
        
@@ -86,41 +80,24 @@
                 window.alert('Failed to send message ' + error);
             });
         }
-        
-        function sendImage(imageFile) {
-  liff.sendMessages([{
-    'type': 'image',
-    'originalContentUrl': URL.createObjectURL(imageFile),
-    'previewImageUrl': URL.createObjectURL(imageFile)
-  }]).then(function () {
-    liff.closeWindow();
-  }).catch(function (error) {
-    window.alert('Failed to send message ' + error);
-  });
-}
 
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
 
         $(function () {
-  $('form').submit(function (event) {
-    event.preventDefault();
-    const busyo   = $('input[name="busyo"]').val();
-    const name    = $('input[name="name"]').val();
-    const maker   = $('input[name="maker"]').val();
-    const kisyu   = $('input[name="kisyu"]').val();
-    const buhin   = $('input[name="buhin"]').val();
-    const mitsumori = $('input[name="mitsumori"]:checked').val();
-    const bikou   = $('input[name="bikou"]').val();
-    const imageFile = $('input[name="image"]')[0].files[0];
-    if (imageFile) {
-      sendImage(imageFile);
-    } else {
-      const message = `部署: ${busyo}\n氏名: ${name}\nメーカー: ${maker}\n機種: ${kisyu}\n部品: ${buhin}\n修理見積: ${mitsumori}\n備考: ${bikou}`;
-      sendText(message);
-    }
-  });
-});
+            $('form').submit(function () {
+                const busyo   = $('input[name="busyo"]').val();
+                const name    = $('input[name="name"]').val();
+                const maker = $('input[name="maker"]').val();
+                const kisyu  = $('input[name="kisyu"]').val();
+                const buhin  = $('input[name="buhin"]').val();
+                const mitsumori = $('input[name="mitsumori"]').val();
+                const bikou  = $('input[name="bikou"]').val();
+                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+                sendText(msg);
+                return false;
+            });
+        });
         
 
     </script>
