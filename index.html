@@ -12,32 +12,32 @@
     <p class="text-center">【健康観察フォーム】</p>
     <p class="text-center">毎朝6:30～7:00に記入をして、送信してください</p>
     <form class="w-75 mx-auto">
-        <p class="mt-3">氏名（例：やまだ　たろう）</p>
+        <p class="mt-3">氏名（例：金村　洋平）</p>
         <div>
             <input class="form-control w-100 mt-1" name="name" required>
         </div>
-        <p class="mt-3">出席番号</p>
+        <p class="mt-3">メーカー</p>
         <div>
-            <input type = "number" name="bangou" min="1" max="35" required>                                                                                                                      
+            <input class="form-control w-100 mt-1" name="maker" required>                                                                                                                      
         </div>
-        <p class="mt-3">今朝の体温</p>
+        <p class="mt-3">機種</p>
         <div>
-            <input type = "number" name="temperature" step="0.1" min="33.0" max="40.0" value="36.5" required>℃                                                                                                                     
+            <input class="form-control w-100 mt-1" name="kisyu" required>                                                                                                                     
         </div>
-        <p class="mt-3">かぜの症状（せき、のどの痛み、頭痛やだるさ、味覚・嗅覚の異常など）がある場合は記入してください</p>
-        <p class="mt-n1">※症状がなければ、「なし」と記入してください</p>
+        <p class="mt-3">必要な部品名を入力してください、電圧やガス種などの仕様も入力してください。</p>
+        <p class="mt-n1">展開図などが必要であれば「展開図」とにゅうりょくしてください。</p>
         <div>
             <input class="form-control w-100 mt-1" name="shushoujou" required>
         </div>
        <div>
-  <p class="mt-3" required>家族に発熱などの症状のある人がいる</p>
+  <p class="mt-3" required>修理見積もりが必要ですか？</p>
   <input id="radio-a" type="radio" name="family" value="はい" checked><label for="radio-a">はい</label>
   <input id="radio-b" type="radio" name="family" value="いいえ"><label for="radio-b">いいえ</label>
 </div>
 
 
        
-        <input type="submit" class="mt-4 btn btn-primary" value="連絡する">
+        <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
