@@ -161,6 +161,18 @@
             });
         });
         
+        // 送信ボタンがクリックされたら確認用ダイアログを表示
+$("form").on("submit", function (event) {
+  event.preventDefault(); // フォームのデフォルトの送信動作をキャンセル
+  const form = this;
+  const message = "本当に送信しますか？";
+  const result = confirm(message);
+  if (result) {
+    form.submit(); // 確認ダイアログでOKを選択した場合、フォームを送信
+  }
+});
+
+        
 
     </script>
 
