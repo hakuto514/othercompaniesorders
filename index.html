@@ -100,6 +100,55 @@
         const key = params.get('key');
         
         $(function () {
+  $('input[name="name"]').on('blur', function () {
+    const value = $(this).val();
+    const options = $('#simei option');
+    let found = false;
+    for (let i = 0; i < options.length; i++) {
+      if (options.eq(i).val() === value) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      $(this).val('');
+    }
+  });
+
+  $('form').submit(function (event) {
+    event.preventDefault();
+    Swal.fire({
+      title: '送信確認',
+      text: '本当に送信しますか？',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '送信',
+      cancelButtonText: 'キャンセル'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const busyo = $('input[name="busyo"]').val();
+        const name = $('input[name="name"]').val();
+        const maker = $('input[name="maker"]').val();
+        const kisyu = $('input[name="kisyu"]').val();
+        const buhin = $('input[name="buhin"]').val();
+        const mitsumori = $('input[name="mitsumori"]:checked').val();
+        const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+        const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+        sendText(msg);
+      }
+    });
+  });
+});
+この例では、<input>のblurイベントを監視して、入力値が<datalist>の候補に含まれていない場合は、入力値を空に設定しています。このようにすることで、不正な値を送信することを防ぐことができます。
+
+
+
+
+
+
+
+        
+        $(function () {
         $('form').submit(function (event) {
             event.preventDefault();
             Swal.fire({
