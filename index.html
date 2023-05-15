@@ -114,7 +114,7 @@
                     const kisyu = $('input[name="kisyu"]').val();
                     const buhin = $('input[name="buhin"]').val();
                     const mitsumori = $('input[name="mitsumori"]:checked').val();
-                    const bikou = $('input[name="bikou"]').val();
+                    const bikou = $('textarea[name="bikou"]').val();
                     const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
                     sendText(msg);
                 }
