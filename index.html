@@ -45,25 +45,156 @@
     <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
     <input id="radio-b" type="radio" name="mitsumori" value="不要"><label for="radio-b">不要</label>
 </div>
-
-
-
-
-
-
+           
+   
        <p class="mt-3">備考</p>
         <div>
             <input class="form-control w-100 mt-1 h-25" name="bikou" placeholder="仕様や製品番号、ガス種など">                                                                                                                     
-        </div>                                                                            
-
+        </div> 
+           
+       <p class="mt-3">画像</p> 
+         <div>
+            <input type="file" id="image-file" accept="image/*">
+         </div>
 
        
-        <input type="submit" class="mt-4 btn btn-primary" value="送信する">
+        <input type="submit" class="mt-4 btn btn-primary" value="送信する"　onclick="postImage()">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const liffId = "1661066964-VDmMrPNX";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+        
+        async function postImage() {
+    const img = document.getElementById('image-file').files[0];
+    const base64 = await getBase64(img);
+    liff.sendMessages([{
+        'type': 'image',
+        'originalContentUrl': base64,
+        'previewImageUrl': base64
+    }]).then(function() {
+        window.alert('画像が送信されました');
+    }).catch(function(error) {
+        window.alert('画像の送信に失敗しました：' + error);
+    });
+}
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const busyo   = $('input[name="busyo"]').val();
+                const name    = $('select[name="name"] option:selected').val();
+                const maker = $('input[name="maker"]').val();
+                const kisyu  = $('input[name="kisyu"]').val();
+                const buhin  = $('input[name="buhin"]').val();
+                const mitsumori = $('input[name="mitsumori"]:checked').val();
+                const bikou  = $('input[name="bikou"]').val();
+                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+                sendText(msg);
+                return false;
+            });
+        });
+        
+
+    </script>
+
+</body>
+</html>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const liffId = "1661066964-VDmMrPNX";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const busyo   = $('input[name="busyo"]').val();
+                const name    = $('select[name="name"] option:selected').val();
+                const maker = $('input[name="maker"]').val();
+                const kisyu  = $('input[name="kisyu"]').val();
+                const buhin  = $('input[name="buhin"]').val();
+                const mitsumori = $('input[name="mitsumori"]:checked').val();
+                const bikou  = $('input[name="bikou"]').val();
+                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+                sendText(msg);
+                return false;
+            });
+        });
+        
+
+    </script>
+
+</body>
+</html>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script>
