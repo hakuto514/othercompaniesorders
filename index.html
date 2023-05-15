@@ -96,58 +96,6 @@
 
         $(function () {
             $('form').submit(function () {
-                const busyo   = $('input[name="busyo"]').val();
-                const name    = $('select[name="name"] option:selected').val();
-                const maker = $('input[name="maker"]').val();
-                const kisyu  = $('input[name="kisyu"]').val();
-                const buhin  = $('input[name="buhin"]').val();
-                const mitsumori = $('input[name="mitsumori"]:checked').val();
-                const bikou  = $('input[name="bikou"]').val();
-                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
-                sendText(msg);
-                return false;
-            });
-        });
-        
-
-    </script>
-
-</body>
-</html>
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-    <script>
-
-        $(document).ready(function () {
-            const liffId = "1661066964-VDmMrPNX";
-            initializeLiff(liffId);
-        })
-
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId
-            }).then(() => {
-                initializeApp();
-            }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
-            });
-        }
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
-
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-
-        $(function () {
-            $('form').submit(function () {
                 if (confirm("本当に送信しますか？")) {
                 const busyo   = $('input[name="busyo"]').val();
                 const name    = $('select[name="name"] option:selected').val();
@@ -159,66 +107,6 @@
                 const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
                 sendText(msg);
                 }
-                return false;
-            });
-        });
-        
-    
-
-        
-
-    </script>
-
-</body>
-</html>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-    <script>
-
-        $(document).ready(function () {
-            const liffId = "1661066964-VDmMrPNX";
-            initializeLiff(liffId);
-        })
-
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId
-            }).then(() => {
-                initializeApp();
-            }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
-            });
-        }
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
-
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-        
-        
-
-
-        $(function () {
-            $('form').submit(function () {
-                const busyo   = $('input[name="busyo"]').val();
-                const name    = $('select[name="name"] option:selected').val();
-                const maker = $('input[name="maker"]').val();
-                const kisyu  = $('input[name="kisyu"]').val();
-                const buhin  = $('input[name="buhin"]').val();
-                const mitsumori = $('input[name="mitsumori"]:checked').val();
-                const bikou  = $('input[name="bikou"]').val();
-                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
-                sendText(msg);
                 return false;
             });
         });
