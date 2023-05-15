@@ -61,6 +61,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
 
         $(document).ready(function () {
@@ -93,23 +94,49 @@
 
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
-
+        
         $(function () {
-            $('form').submit(function () {
-                if (confirm("本当に送信しますか？")) {
-                const busyo   = $('input[name="busyo"]').val();
-                const name    = $('select[name="name"] option:selected').val();
-                const maker = $('input[name="maker"]').val();
-                const kisyu  = $('input[name="kisyu"]').val();
-                const buhin  = $('input[name="buhin"]').val();
-                const mitsumori = $('input[name="mitsumori"]:checked').val();
-                const bikou  = $('input[name="bikou"]').val();
-                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
-                sendText(msg);
+        $('form').submit(function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '送信確認',
+                text: '本当に送信しますか？',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '送信',
+                cancelButtonText: 'キャンセル'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const busyo = $('input[name="busyo"]').val();
+                    const name = $('select[name="name"] option:selected').val();
+                    const maker = $('input[name="maker"]').val();
+                    const kisyu = $('input[name="kisyu"]').val();
+                    const buhin = $('input[name="buhin"]').val();
+                    const mitsumori = $('input[name="mitsumori"]:checked').val();
+                    const bikou = $('input[name="bikou"]').val();
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+                    sendText(msg);
                 }
-                return false;
             });
         });
+    });
+
+//         $(function () {
+//             $('form').submit(function () {
+//                 if (confirm("本当に送信しますか？")) {
+//                 const busyo   = $('input[name="busyo"]').val();
+//                 const name    = $('select[name="name"] option:selected').val();
+//                 const maker = $('input[name="maker"]').val();
+//                 const kisyu  = $('input[name="kisyu"]').val();
+//                 const buhin  = $('input[name="buhin"]').val();
+//                 const mitsumori = $('input[name="mitsumori"]:checked').val();
+//                 const bikou  = $('input[name="bikou"]').val();
+//                 const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
+//                 sendText(msg);
+//                 }
+//                 return false;
+//             });
+//         });
         
 
     </script>
