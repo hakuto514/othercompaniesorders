@@ -19,14 +19,23 @@
         </div>
         <p class="mt-3">氏名</p>
         <div>
-           <datalist class="form-control w-100 mt-1" name="name" required>
+            <input type="text" name="name" list="simei" placeholder="テキスト入力も可能" autocomplete="off" required>
+              <datalist id="simei">
+              <option value="高橋大輔">
+  　          <option value="重親亮介">
+  　          <option value="山澤亮太">
+              <option value="牧田寛之">
+              <option value="小椋政継">
+              <option value="土岐大輔">
+  </datalist>
+<!--            <datalist class="form-control w-100 mt-1" name="name" required>
              <option value="高橋大輔">高橋大輔</option>
              <option value="重親亮介">重親亮介</option>
              <option value="山澤亮太">山澤亮太</option>
              <option value="牧田寛之">牧田寛之</option>
              <option value="小椋政継">小椋政継</option> 
              <option value="土岐大輔">土岐大輔</option>
-            </datalist>
+            </datalist> -->
         </div>
         <p class="mt-3">メーカー</p>
         <div>
