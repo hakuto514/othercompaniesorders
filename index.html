@@ -148,6 +148,7 @@
 
         $(function () {
             $('form').submit(function () {
+                if (confirm("本当に送信しますか？")) {
                 const busyo   = $('input[name="busyo"]').val();
                 const name    = $('select[name="name"] option:selected').val();
                 const maker = $('input[name="maker"]').val();
@@ -157,20 +158,12 @@
                 const bikou  = $('input[name="bikou"]').val();
                 const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
                 sendText(msg);
+                }
                 return false;
             });
         });
         
-        // 送信ボタンがクリックされたら確認用ダイアログを表示
-$("form").on("submit", function (event) {
-  event.preventDefault(); // フォームのデフォルトの送信動作をキャンセル
-  const form = this;
-  const message = "本当に送信しますか？";
-  const result = confirm(message);
-  if (result) {
-    form.submit(); // 確認ダイアログでOKを選択した場合、フォームを送信
-  }
-});
+    
 
         
 
