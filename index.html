@@ -35,9 +35,11 @@
         </div>
        <div>
   <p class="mt-3" required>修理見積もりが必要ですか？</p>
-<label><input type="radio" name="mitsumori" value="必要">必要</label>
-<label><input type="radio" name="mitsumori" value="不要" checked>不要</label>
+<div>
+    <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
+    <input id="radio-b" type="radio" name="mitsumori" value="不要"><label for="radio-b">不要</label>
 </div>
+
 
 
 
@@ -96,7 +98,7 @@
                 const maker = $('input[name="maker"]').val();
                 const kisyu  = $('input[name="kisyu"]').val();
                 const buhin  = $('input[name="buhin"]').val();
-                const mitsumori = $('input[name="mitsumori"]').val();
+                const mitsumori = $('input[name="mitsumori"]:checked').val();
                 const bikou  = $('input[name="bikou"]').val();
                 const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${kisyu}\n${buhin}\n${mitsumori}\n${bikou}`;
                 sendText(msg);
