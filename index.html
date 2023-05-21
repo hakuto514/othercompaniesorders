@@ -60,6 +60,9 @@
             <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
         </div>
            
+           <!-- 画像アップロード用の入力フィールド -->
+  <input type="file" id="fileInput" accept="image/*" />
+           
 
            
    
@@ -79,73 +82,85 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <script>
+  <script>
+  $(document).ready(function () {
+    const liffId = "1661066964-VDmMrPNX";
+    initializeLiff(liffId);
+  });
 
-        $(document).ready(function () {
-            const liffId = "1661066964-VDmMrPNX";
-            initializeLiff(liffId);
-        })
-
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId
-            }).then(() => {
-                initializeApp();
-            }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
-            });
-        }
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
-        
-
-
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-        
-     
-        
-        $(function () {
-        $('form').submit(function (event) {
-            event.preventDefault();
-            Swal.fire({
-                title: '送信確認',
-                text: '本当に送信しますか？',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '送信',
-                cancelButtonText: 'キャンセル'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const busyo = $('input[name="busyo"]').val();
-                    const name = $('select[name="name"]').val();
-                    const maker = $('input[name="maker"]').val();
-                    const syohin = $('input[name="syohin"]').val();
-                    const katasiki = $('input[name="katasiki"]').val();
-                    const buhin = $('input[name="buhin"]').val();
-                    const mitsumori = $('input[name="mitsumori"]:checked').val();
-                    const genba = $('input[name="genba"]').val();
-                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
-                    sendText(msg);
-                }
-            });
-        });
+  function initializeLiff(liffId) {
+    liff.init({
+      liffId: liffId
+    }).then(() => {
+      initializeApp();
+    }).catch((err) => {
+      console.log('LIFF Initialization failed ', err);
     });
+  }
 
+  function sendText(text) {
+    liff.sendMessages([{
+      'type': 'text',
+      'text': text
+    }]).then(function () {
+      liff.closeWindow();
+    }).catch(function (error) {
+      window.alert('Failed to send message ' + error);
+    });
+  }
 
-        
+  const params = (new URL(document.location)).searchParams;
+  const key = params.get('key');
 
-    </script>
+  $(function () {
+    $('form').submit(function (event) {
+      event.preventDefault();
+      Swal.fire({
+        title: '送信確認',
+        text: '本当に送信しますか？',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '送信',
+        cancelButtonText: 'キャンセル'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const busyo = $('input[name="busyo"]').val();
+          const name = $('select[name="name"]').val();
+          const maker = $('input[name="maker"]').val();
+          const syohin = $('input[name="syohin"]').val();
+          const katasiki = $('input[name="katasiki"]').val();
+          const buhin = $('input[name="buhin"]').val();
+          const mitsumori = $('input[name="mitsumori"]:checked').val();
+          const genba = $('input[name="genba"]').val();
+          const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+          const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
+
+          // 画像アップロード処理
+          const formData = new FormData();
+          const fileInput = document.getElementById('fileInput');
+          const file = fileInput.files[0];
+          formData.append('file', file);
+
+          fetch('https://drive.google.com/drive/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            // 画像のアップロードが成功した場合の処理
+            console.log('画像アップロード成功:', data);
+            sendText(msg); // メッセージ送信
+          })
+          .catch(error => {
+            // 画像のアップロードが失敗した場合の処理
+            console.error('画像アップロードエラー:', error);
+            sendText('画像のアップロードに失敗しました。'); // エラーメッセージ送信
+          });
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
