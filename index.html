@@ -59,6 +59,10 @@
         <div>
             <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
         </div>
+            <p class="mt-3">現場名</p>
+        <div>
+            <input type="file" id="fileInput">                                                                                                                      
+        </div>
            
    
        <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
@@ -68,7 +72,7 @@
 　　　　</div> 
 
        
-        <input type="submit" class="mt-4 btn btn-primary" value="送信する">
+        <input type="submit" class="mt-4 btn btn-primary" value="送信する" onclick="uploadImage()">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -104,6 +108,58 @@
                 window.alert('Failed to send message ' + error);
             });
         }
+        
+            function uploadImage() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imageData = e.target.result;
+          const fileName = file.name;
+          const mimeType = file.type;
+
+          // Google Driveへの画像保存処理
+          saveToGoogleDrive(imageData, fileName, mimeType);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function saveToGoogleDrive(imageData, fileName, mimeType) {
+      // ここにGoogle Drive APIを使用して画像を保存するコードを追加します
+      // Google Drive APIを呼び出し、ファイルを作成またはアップロードします
+      // APIから返されたGoogle DriveのファイルIDを取得します
+
+      const googleDriveFileId = "1YozMI7lC97vKdhK4nVo--uASXmFRPvu5"; // ここに実際のGoogle DriveのファイルIDを入力します
+
+      // LINEタイムラインへの投稿処理
+      postToTimeline(googleDriveFileId);
+    }
+
+    function postToTimeline(googleDriveFileId) {
+      const message = {
+        type: 'text',
+        text: '新しい画像が投稿されました!'
+      };
+
+      const media = {
+        type: 'image',
+        originalContentUrl: `https://drive.google.com/uc?id=${googleDriveFileId}`,
+        previewImageUrl: `https://drive.google.com/thumbnail?id=${googleDriveFileId}`
+      };
+
+      liff.init({ liffId: 'liffId' }).then(() => {
+        liff.sendMessages([message, media])
+          .then(() => {
+            liff.closeWindow();
+          })
+          .catch((error) => {
+            console.error('Error sending message: ', error);
+          });
+      });
+    }
         
 
 
