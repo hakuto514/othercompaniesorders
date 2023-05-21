@@ -60,13 +60,7 @@
             <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
         </div>
            
-            <div>
-    <label for="fileUpload">画像アップロード:</label>
-    <input type="file" id="fileUpload" name="fileUpload">
-  </div>
-           
-
-           
+          
    
        <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
        <div>
@@ -84,104 +78,72 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script>
-  $(document).ready(function() {
-    const liffId = "1661066964-VDmMrPNX";
-    initializeLiff(liffId);
-  });
+   <script>
 
-  function initializeLiff(liffId) {
-    liff.init({
-      liffId: liffId
-    }).then(() => {
-      initializeApp();
-    }).catch((err) => {
-      console.log('LIFF Initialization failed ', err);
-    });
-  }
+        $(document).ready(function () {
+            const liffId = "1661066964-VDmMrPNX";
+            initializeLiff(liffId);
+        })
 
-  function sendText(text) {
-    liff.sendMessages([{
-      'type': 'text',
-      'text': text
-    }]).then(function() {
-      liff.closeWindow();
-    }).catch(function(error) {
-      window.alert('Failed to send message ' + error);
-    });
-  }
-
-  const params = (new URL(document.location)).searchParams;
-  const key = params.get('key');
-
-  $(function() {
-    $('form').submit(function(event) {
-      event.preventDefault();
-      Swal.fire({
-        title: '送信確認',
-        text: '本当に送信しますか？',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '送信',
-        cancelButtonText: 'キャンセル'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const busyo = $('input[name="busyo"]').val();
-          const name = $('select[name="name"]').val();
-          const maker = $('input[name="maker"]').val();
-          const syohin = $('input[name="syohin"]').val();
-          const katasiki = $('input[name="katasiki"]').val();
-          const buhin = $('input[name="buhin"]').val();
-          const mitsumori = $('input[name="mitsumori"]:checked').val();
-          const genba = $('input[name="genba"]').val();
-          const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-          const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
-          sendText(msg);
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
         }
-      });
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+        
+
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+        
+     
+        
+        $(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '送信確認',
+                text: '本当に送信しますか？',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '送信',
+                cancelButtonText: 'キャンセル'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const busyo = $('input[name="busyo"]').val();
+                    const name = $('select[name="name"]').val();
+                    const maker = $('input[name="maker"]').val();
+                    const syohin = $('input[name="syohin"]').val();
+                    const katasiki = $('input[name="katasiki"]').val();
+                    const buhin = $('input[name="buhin"]').val();
+                    const mitsumori = $('input[name="mitsumori"]:checked').val();
+                    const genba = $('input[name="genba"]').val();
+                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
+                    sendText(msg);
+                }
+            });
+        });
     });
-  });
 
-  // 画像アップロード処理
-  function postImage(e) {
-    const fileUpload = document.getElementById('fileUpload');
-    const file = fileUpload.files[0];
-    const reader = new FileReader();
 
-    reader.onloadend = function() {
-      const arrayBuffer = reader.result;
-      const bytes = new Uint8Array(arrayBuffer);
+        
 
-      const blob = new Blob([bytes], { type: file.type });
-      uploadImageToDrive(blob);
-    };
-
-    reader.readAsArrayBuffer(file);
-  }
-
-  function uploadImageToDrive(blob) {
-    const folderId = "1YozMI7lC97vKdhK4nVo--uASXmFRPvu5"; // 画像をアップロードするGoogleドライブフォルダのIDを指定
-
-    const file = new File([blob], "uploaded_image.png", { type: blob.type });
-    const metadata = {
-      name: file.name,
-      parents: [folderId]
-    };
-
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', file);
-
-    fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-      method: 'POST',
-      headers: new Headers({ 'Authorization': 'Bearer ' + liff.getAccessToken() }),
-      body: form
-    })
-      .then(response => response.json())
-      .then(data => console.log('File uploaded: ', data))
-      .catch(error => console.error('Error uploading file: ', error));
-  }
-</script>
-
+    </script>
 </body>
 </html>
