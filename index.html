@@ -60,10 +60,6 @@
             <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
         </div>
            
-          <div>
-             <label for="imageInput">画像アップロード:</label>
-             <input type="file" name="imageInput" id="imageInput">
-           </div>
 
            
    
@@ -83,17 +79,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        
-          // 以下の部分を追加
-  function uploadImageToDrive(blob) {
-    const folderId = '1YozMI7lC97vKdhK4nVo--uASXmFRPvu5'; // 画像をアップロードするGoogleドライブフォルダのIDを指定してください
-    const folder = DriveApp.getFolderById(folderId);
-    const fileImage = folder.createFile(blob);
-    fileImage.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
-    return fileImage.getId();
-  }
-  // 追加部分ここまで
+   <script>
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
@@ -150,21 +136,7 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
-                    
-                     // 以下の部分を追加
-          const fileInput = document.getElementById('imageInput'); // 画像ファイルを選択するinput要素のIDを指定してください
-          const file = fileInput.files[0];
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const imageBlob = e.target.result;
-            const blob = Utilities.newBlob(imageBlob, 'image/jpeg', file.name);
-            const fileId = uploadImageToDrive(blob);
-            msg += `\n画像ファイルID: ${fileId}`;
-            sendText(msg);
-          }
-          reader.readAsDataURL(file);
-          // 追加部分ここまで
-                   
+                    sendText(msg);
                 }
             });
         });
