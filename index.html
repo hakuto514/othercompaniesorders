@@ -43,10 +43,18 @@
         <div>
             <input class="form-control w-100 mt-1 mb-2" name="katasiki" placeholder="例）SRR－F1561C2A" required>                                                                                                                     
         </div>
+        <p class="mt-3">機番（部品注文の場合は空白で可）</p>
+        <div>
+            <input class="form-control w-100 mt-1 mb-2" name="kiban" placeholder="A012345" >                                                                                                                     
+        </div>
         <p class="mt-5">以下は必要な部品名を入力してください。</p>
         <p class="mt-n1">展開図などが必要であれば「展開図希望」などと入力してください。</p>
         <div>
             <input class="form-control w-100 mt-1" name="buhin" placeholder="例）ファンモーター" required>
+        </div>
+        <p class="mt-3">症状（部品注文の場合は空白で可）</p>
+        <div>
+            <input class="form-control w-100 mt-1 mb-2" name="syoujyou" placeholder="例）異音がする" >                                                                                                                     
         </div>
        <div>
   <p class="mt-5" required>修理見積もりが必要ですか？</p>
@@ -130,11 +138,13 @@
                     const maker = $('input[name="maker"]').val();
                     const syohin = $('input[name="syohin"]').val();
                     const katasiki = $('input[name="katasiki"]').val();
+                    const kiban = $('input[name="kiban"]').val();
                     const buhin = $('input[name="buhin"]').val();
+                    const syoujyou = $('input[name="syoujyou"]').val();
                     const mitsumori = $('input[name="mitsumori"]:checked').val();
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${buhin}\n${mitsumori}\n${genba}\n${bikou}`;
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
                     sendText(msg);
                 }
             });
