@@ -45,7 +45,7 @@
         </div>
         <p class="mt-3">機番（不明の場合は空白で可）</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="kiban" placeholder="A012345" >                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="kiban" placeholder="A012345">                                                                                                                     
         </div>
         <p class="mt-5">以下は必要な部品名を入力してください。</p>
         <p class="mt-n1">展開図などが必要であれば「展開図希望」などと入力してください。</p>
@@ -54,33 +54,34 @@
         </div>
         <p class="mt-3">症状（部品注文の場合は空白で可）</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="syoujyou" placeholder="例）異音がする" >                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="syoujyou" placeholder="例）異音がする">                                                                                                                     
         </div>
-       <div>
-  <p class="mt-5" required>修理見積もり作成について</p>
-<div class="mb-3">
-    <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
-    <input id="radio-b" type="radio" name="mitsumori" value="部品価格のみ知りたい"><label for="radio-b">部品価格のみ知りたい</label>
-</div>
-           
-           <p class="mt-3">現場名</p>
+        <div>
+            <p class="mt-5" required>修理見積もり作成について</p>
+            <div class="mb-3">
+                <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
+                <input id="radio-b" type="radio" name="mitsumori" value="部品価格のみ知りたい"><label for="radio-b">部品価格のみ知りたい</label>
+            </div>
+        </div>
+        <p class="mt-3">現場名</p>
         <div>
             <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
         </div>
-           
-          
-   
-       <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
-       <div>
-  　　　　<textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1"  <input type="text" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」">
-</textarea>
-　　　　</div> 
-        
-            <label for="imageInput">画像添付:</label>
-    <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect();"><br>
-    <img id="imgPreview" src="#" alt="画像プレビュー" style="max-width: 300px;"><br>
+        <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
+        <div>
+            <textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」"></textarea>
+        </div> 
 
-       
+        <div class="mt-4">
+            <label for="imageUpload">画像の添付</label>
+            <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)" required>
+        </div>
+
+        <div id="previewContainer" class="mt-4">
+            <p>選択された画像：</p>
+            <img id="previewImage" style="max-width: 400px;">
+        </div>
+
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
@@ -90,12 +91,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <script>
+    <script>
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
             initializeLiff(liffId);
-        })
+        });
 
         function initializeLiff(liffId) {
             liff.init({
@@ -106,103 +107,67 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
-       
-       // 画像の選択とプレビュー表示
-function handleImageSelect() {
-  var fileInput = document.getElementById('imageInput');
-  var file = fileInput.files[0];
-  var imgPreview = document.getElementById('imgPreview');
 
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    imgPreview.src = e.target.result;
-  };
-
-  reader.readAsDataURL(file);
-}
-
-// 画像とフォームデータの送信処理
-function postImage(event) {
-  event.preventDefault();
-
-  var textInput = document.getElementById('textInput').value;
-  var imgPreview = document.getElementById('imgPreview');
-
-  var formData = new FormData();
-  formData.append('text', textInput);
-  formData.append('image', imgPreview.src);
-
-  // 画像とフォームデータをサーバーに送信する処理を実装してください
-  // 例: fetch('/submit', { method: 'POST', body: formData })
-}
-
-// 送信後の処理
-function sendText(text) {
-  liff.sendMessages([{ 'type': 'text', 'text': text }])
-    .then(function() {
-      liff.closeWindow();
-    })
-    .catch(function(error) {
-      window.alert('Failed to send message ' + error);
-    });
-}
-
-       
-       
-       
-       
-       
-
-        function sendText(text) {
+        function sendText(text, imageUrl) {
             liff.sendMessages([{
                 'type': 'text',
                 'text': text
             }]).then(function () {
+                if (imageUrl) {
+                    liff.sendMessages([{
+                        'type': 'image',
+                        'originalContentUrl': imageUrl,
+                        'previewImageUrl': imageUrl
+                    }]);
+                }
                 liff.closeWindow();
             }).catch(function (error) {
                 window.alert('Failed to send message ' + error);
             });
         }
-        
 
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#previewImage').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
 
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
-        
-     
-        
+
         $(function () {
-        $('form').submit(function (event) {
-            event.preventDefault();
-            Swal.fire({
-                title: '送信確認',
-                text: '本当に送信しますか？',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '送信',
-                cancelButtonText: 'キャンセル'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const busyo = $('input[name="busyo"]').val();
-                    const name = $('select[name="name"]').val();
-                    const maker = $('input[name="maker"]').val();
-                    const syohin = $('input[name="syohin"]').val();
-                    const katasiki = $('input[name="katasiki"]').val();
-                    const kiban = $('input[name="kiban"]').val();
-                    const buhin = $('input[name="buhin"]').val();
-                    const syoujyou = $('input[name="syoujyou"]').val();
-                    const mitsumori = $('input[name="mitsumori"]:checked').val();
-                    const genba = $('input[name="genba"]').val();
-                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-                    sendText(msg);
-                }
+            $('form').submit(function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: '送信確認',
+                    text: '本当に送信しますか？',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '送信',
+                    cancelButtonText: 'キャンセル'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const busyo = $('input[name="busyo"]').val();
+                        const name = $('select[name="name"]').val();
+                        const maker = $('input[name="maker"]').val();
+                        const syohin = $('input[name="syohin"]').val();
+                        const katasiki = $('input[name="katasiki"]').val();
+                        const kiban = $('input[name="kiban"]').val();
+                        const buhin = $('input[name="buhin"]').val();
+                        const syoujyou = $('input[name="syoujyou"]').val();
+                        const mitsumori = $('input[name="mitsumori"]:checked').val();
+                        const genba = $('input[name="genba"]').val();
+                        const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+                        const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                        const imageUrl = $('#previewImage').attr('src');
+                        sendText(msg, imageUrl);
+                    }
+                });
             });
         });
-    });
-
-
-        
 
     </script>
 </body>
