@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -5,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
     <title></title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
 </head>
 <body>
     <p class="text-center">【支援依頼フォーム】</p>
-    <p class="text-center">下記空欄を入力をして、送信してください</p>
+    <p class="text-center">下記空欄を入力して、送信してください</p>
     <form class="w-75 mx-auto" onsubmit="submitForm(); return false;">
         <p class="mt-3">部署</p>
         <div>
@@ -19,15 +20,15 @@
         </div>
         <p class="mt-3">氏名</p>
         <div>
-              <select class="form-control w-100 mt-1" name="name" required>
-                 <option value="">選択してください</option>
-                 <option value="高橋大輔">高橋大輔</option>
-                 <option value="重親亮介">重親亮介</option>
-                 <option value="山澤亮太">山澤亮太</option>
-                 <option value="牧田寛之">牧田寛之</option>
-                 <option value="小椋政継">小椋政継</option>
-                 <option value="土岐大輔">土岐大輔</option>
-              </select>
+            <select class="form-control w-100 mt-1" name="name" required>
+                <option value="">選択してください</option>
+                <option value="高橋大輔">高橋大輔</option>
+                <option value="重親亮介">重親亮介</option>
+                <option value="山澤亮太">山澤亮太</option>
+                <option value="牧田寛之">牧田寛之</option>
+                <option value="小椋政継">小椋政継</option>
+                <option value="土岐大輔">土岐大輔</option>
+            </select>
         </div>
         
         <p class="mt-3">メーカー</p>
@@ -69,19 +70,11 @@
         </div>
         <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
         <div>
-            <textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」"></textarea>
+            <textarea class="form-control h-25" name="bikou" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」"></textarea>
         </div> 
-
-        <div class="mt-4">
-            <label for="imageUpload">画像の添付</label>
-            <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)" required>
+        <div>
+            <input type="file" id="imageInput" name="image" accept="image/*">
         </div>
-
-        <div id="previewContainer" class="mt-4">
-            <p>選択された画像：</p>
-            <img id="previewImage" style="max-width: 400px;">
-        </div>
-
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
@@ -96,7 +89,7 @@
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
             initializeLiff(liffId);
-        });
+        })
 
         function initializeLiff(liffId) {
             liff.init({
@@ -107,36 +100,72 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
+       
+     
 
-        function sendText(text, imageUrl) {
+        function sendText(text) {
             liff.sendMessages([{
                 'type': 'text',
                 'text': text
             }]).then(function () {
-                if (imageUrl) {
-                    liff.sendMessages([{
-                        'type': 'image',
-                        'originalContentUrl': imageUrl,
-                        'previewImageUrl': imageUrl
-                    }]);
-                }
                 liff.closeWindow();
             }).catch(function (error) {
                 window.alert('Failed to send message ' + error);
             });
         }
 
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                $('#previewImage').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(file);
+        function uploadImage(imageData, fileName) {
+            const formData = new FormData();
+            formData.append('image', imageData, fileName);
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://content.dropboxapi.com/2/files/upload',
+                data: formData,
+                processData: false,
+                contentType: 'application/octet-stream',
+                headers: {
+                    'Authorization': 'sl.BfMcfil1jpEtlO6roHOg6jGI-_WsiOKRk92AvVqkeOHgOEawQbSm9aqODvLZl4TtWSDGKSoB4hxFbBvLrZFUgkaVQ1WbOMRSrgzoLlFCLFqpeAJ5cQy0U-SEGYPYbFLtNYbtFtQ',
+                    'Dropbox-API-Arg': '{"path": "/' + fileName + '", "mode": "add", "autorename": true, "mute": false}',
+                },
+                success: function (response) {
+                    const fileUrl = response.path_display;
+                    sendText(fileUrl);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         }
 
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
+        function submitForm() {
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const imageData = reader.result;
+                    const fileName = file.name;
+                    uploadImage(imageData, fileName);
+                }
+                reader.readAsArrayBuffer(file);
+            } else {
+                const busyo = $('input[name="busyo"]').val();
+                const name = $('select[name="name"]').val();
+                const maker = $('input[name="maker"]').val();
+                const syohin = $('input[name="syohin"]').val();
+                const katasiki = $('input[name="katasiki"]').val();
+                const kiban = $('input[name="kiban"]').val();
+                const buhin = $('input[name="buhin"]').val();
+                const syoujyou = $('input[name="syoujyou"]').val();
+                const mitsumori = $('input[name="mitsumori"]:checked').val();
+                const genba = $('input[name="genba"]').val();
+                const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                sendText(msg);
+            }
+        }
 
         $(function () {
             $('form').submit(function (event) {
@@ -147,23 +176,11 @@
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: '送信',
-                    cancelButtonText: 'キャンセル'
+                    cancelButtonText: 'キャンセル',
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        const busyo = $('input[name="busyo"]').val();
-                        const name = $('select[name="name"]').val();
-                        const maker = $('input[name="maker"]').val();
-                        const syohin = $('input[name="syohin"]').val();
-                        const katasiki = $('input[name="katasiki"]').val();
-                        const kiban = $('input[name="kiban"]').val();
-                        const buhin = $('input[name="buhin"]').val();
-                        const syoujyou = $('input[name="syoujyou"]').val();
-                        const mitsumori = $('input[name="mitsumori"]:checked').val();
-                        const genba = $('input[name="genba"]').val();
-                        const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                        const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-                        const imageUrl = $('#previewImage').attr('src');
-                        sendText(msg, imageUrl);
+                        submitForm();
                     }
                 });
             });
