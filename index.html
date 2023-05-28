@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
     <title></title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
 </head>
@@ -75,12 +75,10 @@
   　　　　<textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1"  <input type="text" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」">
 </textarea>
 　　　　</div> 
-       
-       <p class="mt-5 mb-0">画像添付</p>
-       <div>
-            <input type="file" id="fileInput" accept="image/*">
-       </div>
+        
 
+
+       
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
@@ -90,7 +88,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
+   <script>
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
@@ -106,7 +104,9 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
-        
+       
+     
+
         function sendText(text) {
             liff.sendMessages([{
                 'type': 'text',
@@ -117,69 +117,46 @@
                 window.alert('Failed to send message ' + error);
             });
         }
+        
+
 
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
-
-        function submitForm() {
-            const busyo = $('input[name="busyo"]').val();
-            const name = $('select[name="name"]').val();
-            const maker = $('input[name="maker"]').val();
-            const syohin = $('input[name="syohin"]').val();
-            const katasiki = $('input[name="katasiki"]').val();
-            const kiban = $('input[name="kiban"]').val();
-            const buhin = $('input[name="buhin"]').val();
-            const syoujyou = $('input[name="syoujyou"]').val();
-            const mitsumori = $('input[name="mitsumori"]:checked').val();
-            const genba = $('input[name="genba"]').val();
-            const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-            const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-            sendText(msg);
-        }
-
+        
+     
+        
         $(function () {
-            $('form').submit(function (event) {
-                event.preventDefault();
-                Swal.fire({
-                    title: '送信確認',
-                    text: '本当に送信しますか？',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: '送信',
-                    cancelButtonText: 'キャンセル'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        submitForm();
-                    }
-                });
+        $('form').submit(function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '送信確認',
+                text: '本当に送信しますか？',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '送信',
+                cancelButtonText: 'キャンセル'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const busyo = $('input[name="busyo"]').val();
+                    const name = $('select[name="name"]').val();
+                    const maker = $('input[name="maker"]').val();
+                    const syohin = $('input[name="syohin"]').val();
+                    const katasiki = $('input[name="katasiki"]').val();
+                    const kiban = $('input[name="kiban"]').val();
+                    const buhin = $('input[name="buhin"]').val();
+                    const syoujyou = $('input[name="syoujyou"]').val();
+                    const mitsumori = $('input[name="mitsumori"]:checked').val();
+                    const genba = $('input[name="genba"]').val();
+                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                    sendText(msg);
+                }
             });
         });
+    });
 
-        function readFile(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    const base64Image = e.target.result.split(",")[1];
-                    const filename = input.files[0].name;
-                    const extension = filename.split('.').pop().toLowerCase();
-                    const msg = {
-                        type: 'image',
-                        originalContentUrl: `https://drive.google.com/file/d/1tnyOi8p_xaDpsCFi6010-2W5n1CWvvFm/view?usp=drive_link/${filename}`,
-                        previewImageUrl: `https://drive.google.com/file/d/1tnyOi8p_xaDpsCFi6010-2W5n1CWvvFm/view?usp=drive_link/${filename}`
-                    };
-                    liff.sendMessages([msg]).then(function () {
-                        liff.closeWindow();
-                    }).catch(function (error) {
-                        console.log('Failed to send image: ' + error);
-                    });
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
 
-        $('#fileInput').on('change', function () {
-            readFile(this);
-        });
+        
 
     </script>
 </body>
