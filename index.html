@@ -76,6 +76,11 @@
 </textarea>
 　　　　</div> 
         
+        <p class="mt-3">画像（あればURLを貼り付け）</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
+        </div>
+        
 
 
        
@@ -148,7 +153,8 @@
                     const mitsumori = $('input[name="mitsumori"]:checked').val();
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                    const gazou = $('input[name="gazou"]').val();
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
                     sendText(msg);
                 }
             });
