@@ -76,10 +76,12 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-5">画像をアップロードしてください。</p>
+        <p class="mt-5">画像</p>
         <div>
             <input type="file" id="imageUpload" accept="image/*" required>
         </div>
+        
+ 
         
       
         
@@ -111,85 +113,111 @@
                 console.log('LIFF Initialization failed', err);
             });
         }
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
-
-        function submitForm() {
-            Swal.fire({
-                title: '送信確認',
-                text: '本当に送信しますか？',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '送信',
-                cancelButtonText: 'キャンセル'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const busyo = $('input[name="busyo"]').val();
-                    const name = $('select[name="name"]').val();
-                    const maker = $('input[name="maker"]').val();
-                    const syohin = $('input[name="syohin"]').val();
-                    const katasiki = $('input[name="katasiki"]').val();
-                    const kiban = $('input[name="kiban"]').val();
-                    const buhin = $('input[name="buhin"]').val();
-                    const syoujyou = $('input[name="syoujyou"]').val();
-                    const mitsumori = $('input[name="mitsumori"]:checked').val();
-                    const genba = $('input[name="genba"]').val();
-                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-                    const fileInput = document.getElementById('imageUpload');
-                    const file = fileInput.files[0];
-
-                    if (file) {
-                        const formData = new FormData();
-                        formData.append('file', file);
-
-                        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': 'Bearer',
-                                'Content-Type': 'multipart/related; boundary=boundary'
-                            },
-                            body: `--boundary
-Content-Type: application/json; charset=UTF-8
-
-{
-  "name": "${file.name}",
-  "parents": ["1YozMI7lC97vKdhK4nVo--uASXmFRPvu5"]
+          
+          function sendImageAndText(imageUrl, text) {
+  liff.sendMessages([
+    {
+      type: 'text',
+      text: text
+    },
+    {
+      type: 'image',
+      originalContentUrl: imageUrl,
+      previewImageUrl: imageUrl
+    }
+  ]).then(function () {
+    liff.closeWindow();
+  }).catch(function (error) {
+    window.alert('Failed to send message ' + error);
+  });
 }
 
---boundary
-Content-Type: ${file.type}
+// 画像情報を取得し、Google Driveに送信する関数
+function sendImageToGoogleDrive(file) {
+  const driveId = "1YozMI7lC97vKdhK4nVo--uASXmFRPvu5";
+  
+  // 画像を送信する処理を実装する
+  // 以下はサンプルコードです
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  // 画像をGoogle DriveにアップロードするAPIを呼び出す
+  fetch(`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&parents=${driveId}`, {
+    method: 'POST',
+    body: formData
+  }).then(function (response) {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error('Failed to upload image to Google Drive');
+    }
+  }).then(function (data) {
+    const imageUrl = data.webContentLink; // Google Driveから取得した画像のURL
+    
+    // 画像のURLとフォームの他の情報を組み合わせて投稿するテキストを作成する
+    const busyo = $('input[name="busyo"]').val();
+    const name = $('select[name="name"]').val();
+    const maker = $('input[name="maker"]').val();
+    const syohin = $('input[name="syohin"]').val();
+    const katasiki = $('input[name="katasiki"]').val();
+    const kiban = $('input[name="kiban"]').val();
+    const buhin = $('input[name="buhin"]').val();
+    const syoujyou = $('input[name="syoujyou"]').val();
+    const mitsumori = $('input[name="mitsumori"]:checked').val();
+    const genba = $('input[name="genba"]').val();
+    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+    
+    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+    
+    // 画像とテキストを送信する
+    sendImageAndText(imageUrl, msg);
+  }).catch(function (error) {
+    window.alert('Failed to send image to Google Drive: ' + error);
+  });
+}
 
-${formData.get('file')}
-
---boundary--`
-                        }).then(response => response.json())
-                            .then(data => {
-                                const fileId = data.id;
-                                const fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-                                const finalMessage = `${msg}\n\n画像URL: ${fileUrl}`;
-                                sendText(finalMessage);
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                Swal.fire('Error', '画像のアップロード中にエラーが発生しました。', 'error');
-                            });
-                    } else {
-                        sendText(msg);
-                    }
-                }
-            });
+$(function () {
+  $('form').submit(function (event) {
+    event.preventDefault();
+    Swal.fire({
+      title: '送信確認',
+      text: '本当に送信しますか？',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '送信',
+      cancelButtonText: 'キャンセル'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const fileInput = document.getElementById('image-input');
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          
+          // 画像をGoogle Driveに送信する関数を呼び出す
+          sendImageToGoogleDrive(file);
+        } else {
+          // 画像が選択されていない場合は、テキストのみを送信する
+          const busyo = $('input[name="busyo"]').val();
+          const name = $('select[name="name"]').val();
+          const maker = $('input[name="maker"]').val();
+          const syohin = $('input[name="syohin"]').val();
+          const katasiki = $('input[name="katasiki"]').val();
+          const kiban = $('input[name="kiban"]').val();
+          const buhin = $('input[name="buhin"]').val();
+          const syoujyou = $('input[name="syoujyou"]').val();
+          const mitsumori = $('input[name="mitsumori"]:checked').val();
+          const genba = $('input[name="genba"]').val();
+          const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+          
+          const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+          sendText(msg);
         }
+      }
+    });
+  });
+});
+
+
+        
     </script>
 </body>
 </html>
