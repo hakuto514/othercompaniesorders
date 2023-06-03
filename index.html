@@ -76,8 +76,8 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-3">画像</p>
-        <input type="file" id="example" multiple>
+        <p class="mt-3">画像アップロード</p>
+        <form action="https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5" method="post" enctype="multipart/form-data" ></form>
 
 　　　　　<!-- 👇ここにプレビュー画像を追加する -->
 　　　　　<div id="preview"></div>
@@ -94,14 +94,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
        
-       // ファイルデータ
-const file = document.getElementById("example").files[0];
-// フォームデータを作成
-const formData = new FormData();
-// avatarというフィールド名でファイルを追加
-formData.append("avatar", file);
-// アップロード
-fetch("https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5", { method: "POST", body: formData });
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
@@ -119,25 +111,6 @@ fetch("https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRP
         }
        
        
-       
-       function previewFile(file) {
-  // プレビュー画像を追加する要素
-  const preview = document.getElementById('preview');
-
-  // FileReaderオブジェクトを作成
-  const reader = new FileReader();
-
-  // URLとして読み込まれたときに実行する処理
-  reader.onload = function (e) {
-    const imageUrl = e.target.result; // URLはevent.target.resultで呼び出せる
-    const img = document.createElement("img"); // img要素を作成
-    img.src = imageUrl; // URLをimg要素にセット
-    preview.appendChild(img); // #previewの中に追加
-  }
-
-  // いざファイルをURLとして読み込む
-  reader.readAsDataURL(file);
-}
        
      
 
