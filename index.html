@@ -76,9 +76,14 @@
 </textarea>
 　　　　</div> 
         
-       <p class="mt-3">画像情報</p>
+        <p class="mt-3">画像（あればURLを貼り付け）</p>
         <div>
-            <input type="file" class="form-control-file" id="imageInput" accept="image/*">
+            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
+        </div>
+        
+                <p class="mt-3">画像</p>
+        <div>
+              <input type="file" id="imageInput" accept="image/*" style="display:none">
         </div>
         
 
@@ -93,8 +98,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-
+      <script>
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
             initializeLiff(liffId);
@@ -109,7 +113,7 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
-       
+
         function sendText(text) {
             liff.sendMessages([{
                 'type': 'text',
@@ -120,49 +124,54 @@
                 window.alert('Failed to send message ' + error);
             });
         }
-        
-        function uploadImage(file) {
-            const formData = new FormData();
-            formData.append('image', file);
-            
-            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer',
-                    'Content-Type': 'multipart/form-data'
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const imageUrl = `https://drive.google.com/uc?id=${data.id}`;
-                const busyo = $('input[name="busyo"]').val();
-                const name = $('select[name="name"]').val();
-                const maker = $('input[name="maker"]').val();
-                const syohin = $('input[name="syohin"]').val();
-                const katasiki = $('input[name="katasiki"]').val();
-                const kiban = $('input[name="kiban"]').val();
-                const buhin = $('input[name="buhin"]').val();
-                const syoujyou = $('input[name="syoujyou"]').val();
-                const mitsumori = $('input[name="mitsumori"]:checked').val();
-                const genba = $('input[name="genba"]').val();
-                const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                
-                const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n\n【画像情報】\n${imageUrl}`;
-                sendText(msg);
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
-        }
 
-        function submitForm() {
-            const imageInput = document.getElementById('imageInput');
-            const file = imageInput.files[0];
-            
-            if (file) {
-                uploadImage(file);
-            } else {
+        function sendImageToDrive(imageUrl) {
+  return new Promise((resolve, reject) => {
+    const folderId = "1YozMI7lC97vKdhK4nVo--uASXmFRPvu5";
+
+    const fileMetadata = {
+      name: "uploaded_image.jpg",
+      parents: [folderId]
+    };
+
+    fetch(imageUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const formData = new FormData();
+        formData.append("file", blob, fileMetadata.name);
+        formData.append("parents", JSON.stringify(fileMetadata.parents));
+
+        fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", {
+          method: "POST",
+          headers: new Headers({
+            Authorization: `Bearer ${liff.getAccessToken()}`, // LIFFのアクセストークンを使用して認証
+          }),
+          body: formData
+        })
+          .then(response => response.json())
+          .then(result => {
+            const imageUrlDrive = `https://drive.google.com/uc?id=${result.id}`;
+            resolve(imageUrlDrive);
+          })
+          .catch(error => {
+            console.error("Failed to upload image to Google Drive", error);
+            reject(error);
+          });
+      })
+      .catch(error => {
+        console.error("Failed to fetch image", error);
+        reject(error);
+      });
+  });
+}
+
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function (event) {
+                event.preventDefault();
                 Swal.fire({
                     title: '送信確認',
                     text: '本当に送信しますか？',
@@ -183,14 +192,42 @@
                         const mitsumori = $('input[name="mitsumori"]:checked').val();
                         const genba = $('input[name="genba"]').val();
                         const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                        
-                        const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                        const imageInput = document.getElementById('imageInput');
+                        const imageFile = imageInput.files[0];
+                        let imageUrlDrive = null;
+
+                        if (imageFile) {
+                            const imageUrl = URL.createObjectURL(imageFile);
+                            imageUrlDrive = sendImageToDrive(imageUrl);
+                            URL.revokeObjectURL(imageUrl);
+                        }
+
+                        const msg = `【送信内容】\n部署: ${busyo}\n氏名: ${name}\nメーカー: ${maker}\n商品: ${syohin}\n型式: ${katasiki}\n機番: ${kiban}\n部品: ${buhin}\n症状: ${syoujyou}\n見積もり: ${mitsumori}\n現場名: ${genba}\n備考: ${bikou}\n画像URL: ${imageUrlDrive}`;
                         sendText(msg);
                     }
                 });
-            }
-        }
+            });
+        });
 
+        // 以下、画像選択時のイベントハンドラを追加
+        $(function () {
+            $('#imageInput').change(function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#selectedImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // 以下、画像送信処理を追加
+        function sendImageToDrive(imageUrl) {
+            // 画像のアップロード処理を行うためのコードを追加します。
+        }
     </script>
 </body>
 </html>
+
