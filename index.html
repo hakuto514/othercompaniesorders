@@ -76,16 +76,10 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-3">画像（あればURLを貼り付け）</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
-        </div>
-        
-                <p class="mt-3">画像（あればURLを貼り付け）</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="gazou" id="gazouInput" placeholder="タイムラインで取得したURL">
-            <input type="button" class="btn btn-primary mt-2" value="画像を送信" onclick="sendImageToGoogleDrive();">
-        </div>
+ <p class="mt-3">画像</p>
+<div>
+  <input type="file" id="image-input" name="image" accept="image/*">
+</div>
         
 
 
@@ -134,18 +128,44 @@
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
        
-               // 画像を特定のGoogle Driveに送信する関数
-        function sendImageToGoogleDrive() {
-            const gazouUrl = $('input[name="gazou"]').val();
-            if (gazouUrl) {
-                const googleDriveUrl = 'https://drive.google.com/drive/folders/xxxxxxxxxxxxxxxxxxxx'; // Google DriveのURL
-                const msg = `【画像送信】\n${gazouUrl}`;
-                const driveUrl = `${googleDriveUrl}?usp=sharing&msg=${encodeURIComponent(msg)}`;
-                window.open(driveUrl, '_blank');
-            } else {
-                window.alert('画像のURLが入力されていません。');
-            }
-        }
+       
+       function sendImageToDrive(imageUrl) {
+  // 画像を取得
+  const imageResponse = UrlFetchApp.fetch(imageUrl, {
+    headers: {
+      Authorization: "Bearer " + ACCESS_TOKEN,
+    },
+    muteHttpExceptions: true,
+  });
+
+  if (imageResponse.getResponseCode() === 200) {
+    const imageBlob = imageResponse.getBlob();
+
+    // 保存するファイル名を採番
+    const folder = DriveApp.getFolderById(FOLDER_ID);
+    const existingFiles = folder.getFiles();
+    let fileCount = 0;
+
+    while (existingFiles.hasNext()) {
+      existingFiles.next();
+      fileCount++;
+    }
+
+    const fileName = "LINE_image" + (fileCount + 1) + ".jpg";
+
+    // Google Driveフォルダに画像を保存
+    const file = folder.createFile(imageBlob.setName(fileName));
+
+    // 保存した画像のURLを取得
+    const imageUrlDrive = file.getUrl();
+
+    return imageUrlDrive;
+  } else {
+    console.error("Failed to fetch image:", imageResponse.getContentText());
+    return null;
+  }
+}
+
         
      
         
@@ -173,6 +193,12 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
+                      // 画像情報を取得します
+  const imageFile = document.getElementById('image-input').files[0];
+  if (imageFile) {
+    // 画像が選択されている場合は、画像をGoogle Driveにアップロードします
+    sendImageToDrive(imageFile);
+  }
                     const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
                     sendText(msg);
                 }
