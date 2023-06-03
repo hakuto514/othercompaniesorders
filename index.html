@@ -76,9 +76,9 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-3">画像（あればURLを貼り付け）</p>
+        <p class="mt-5">画像をアップロードしてください。</p>
         <div>
-            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
+            <input type="file" id="imageUpload" accept="image/*" required>
         </div>
         
       
@@ -95,7 +95,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <script>
+      <script>
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
@@ -108,11 +108,9 @@
             }).then(() => {
                 initializeApp();
             }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
+                console.log('LIFF Initialization failed', err);
             });
         }
-       
-     
 
         function sendText(text) {
             liff.sendMessages([{
@@ -124,19 +122,8 @@
                 window.alert('Failed to send message ' + error);
             });
         }
-        
 
-
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-       
-
-        
-     
-        
-        $(function () {
-        $('form').submit(function (event) {
-            event.preventDefault();
+        function submitForm() {
             Swal.fire({
                 title: '送信確認',
                 text: '本当に送信しますか？',
@@ -157,17 +144,52 @@
                     const mitsumori = $('input[name="mitsumori"]:checked').val();
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const gazou = $('input[name="gazou"]').val();
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
-                    sendText(msg);
+
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+                    const fileInput = document.getElementById('imageUpload');
+                    const file = fileInput.files[0];
+
+                    if (file) {
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer',
+                                'Content-Type': 'multipart/related; boundary=boundary'
+                            },
+                            body: `--boundary
+Content-Type: application/json; charset=UTF-8
+
+{
+  "name": "${file.name}",
+  "parents": ["1YozMI7lC97vKdhK4nVo--uASXmFRPvu5"]
+}
+
+--boundary
+Content-Type: ${file.type}
+
+${formData.get('file')}
+
+--boundary--`
+                        }).then(response => response.json())
+                            .then(data => {
+                                const fileId = data.id;
+                                const fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                                const finalMessage = `${msg}\n\n画像URL: ${fileUrl}`;
+                                sendText(finalMessage);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire('Error', '画像のアップロード中にエラーが発生しました。', 'error');
+                            });
+                    } else {
+                        sendText(msg);
+                    }
                 }
             });
-        });
-    });
-
-
-        
-
+        }
     </script>
 </body>
 </html>
