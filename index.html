@@ -76,10 +76,11 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-3">画像（あればURLを貼り付け）</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
-        </div>
+        <p class="mt-3">画像</p>
+        <input type="file" id="example" multiple>
+
+　　　　　<!-- 👇ここにプレビュー画像を追加する -->
+　　　　　<div id="preview"></div>
        
        
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
@@ -107,6 +108,27 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
+       
+       
+       
+       function previewFile(file) {
+  // プレビュー画像を追加する要素
+  const preview = document.getElementById('preview');
+
+  // FileReaderオブジェクトを作成
+  const reader = new FileReader();
+
+  // URLとして読み込まれたときに実行する処理
+  reader.onload = function (e) {
+    const imageUrl = e.target.result; // URLはevent.target.resultで呼び出せる
+    const img = document.createElement("img"); // img要素を作成
+    img.src = imageUrl; // URLをimg要素にセット
+    preview.appendChild(img); // #previewの中に追加
+  }
+
+  // いざファイルをURLとして読み込む
+  reader.readAsDataURL(file);
+}
        
      
 
