@@ -12,7 +12,10 @@
 <body>
     <p class="text-center">【支援依頼フォーム】</p>
     <p class="text-center">下記空欄を入力をして、送信してください</p>
-    <form class="w-75 mx-auto" onsubmit="submitForm(); return false;">
+   
+   
+        <form class="w-75 mx-auto" onsubmit="return false;">
+    
         <p class="mt-3">部署</p>
         <div>
             <input class="form-control" name="busyo" placeholder="例）鳥取" required>                                                                                                                      
@@ -76,7 +79,7 @@
 </textarea>
 　　　　</div> 
         
- <p class="mt-3">画像はコチラ</p>
+ <p class="mt-3">画像</p>
 <div>
   <input type="file" id="image-input" name="image" accept="image/*">
 </div>
@@ -84,7 +87,8 @@
 
 
        
-        <input type="submit" class="mt-4 btn btn-primary" value="送信する">
+       
+             <input type="submit" class="mt-4 btn btn-primary" value="送信する" onclick="submitForm()">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -215,7 +219,9 @@ if (imageFile) {
         });
     });
 
-
+// ページのリロードを防ぐために、return false; を追加
+            return false;
+            }
         
 
     </script>
