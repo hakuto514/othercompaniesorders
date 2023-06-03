@@ -93,6 +93,15 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
+       
+       // ファイルデータ
+const file = document.getElementById("example").files[0];
+// フォームデータを作成
+const formData = new FormData();
+// avatarというフィールド名でファイルを追加
+formData.append("avatar", file);
+// アップロード
+fetch("https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5", { method: "POST", body: formData });
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
