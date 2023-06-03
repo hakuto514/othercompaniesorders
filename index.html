@@ -81,6 +81,12 @@
             <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
         </div>
         
+                <p class="mt-3">画像（あればURLを貼り付け）</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="gazou" id="gazouInput" placeholder="タイムラインで取得したURL">
+            <input type="button" class="btn btn-primary mt-2" value="画像を送信" onclick="sendImageToGoogleDrive();">
+        </div>
+        
 
 
        
@@ -127,6 +133,19 @@
 
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
+       
+               // 画像を特定のGoogle Driveに送信する関数
+        function sendImageToGoogleDrive() {
+            const gazouUrl = $('input[name="gazou"]').val();
+            if (gazouUrl) {
+                const googleDriveUrl = 'https://drive.google.com/drive/folders/xxxxxxxxxxxxxxxxxxxx'; // Google DriveのURL
+                const msg = `【画像送信】\n${gazouUrl}`;
+                const driveUrl = `${googleDriveUrl}?usp=sharing&msg=${encodeURIComponent(msg)}`;
+                window.open(driveUrl, '_blank');
+            } else {
+                window.alert('画像のURLが入力されていません。');
+            }
+        }
         
      
         
