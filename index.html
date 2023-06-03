@@ -76,10 +76,10 @@
 </textarea>
 　　　　</div> 
         
-        <p class="mt-3">画像（あればURLを貼り付け）</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
-        </div>
+         <p class="mt-3">画像アップロード</p>
+    <div>
+      <input class="form-control w-100 mt-1" type="file" name="gazou" id="gazou" required>
+    </div>
         
         
 
@@ -94,79 +94,89 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <script>
+    <script>
 
-        $(document).ready(function () {
-            const liffId = "1661066964-VDmMrPNX";
-            initializeLiff(liffId);
-        })
+    $(document).ready(function () {
+      const liffId = "1661066964-VDmMrPNX";
+      initializeLiff(liffId);
+    })
 
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId
-            }).then(() => {
-                initializeApp();
-            }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
-            });
+    function initializeLiff(liffId) {
+      liff.init({
+        liffId: liffId
+      }).then(() => {
+        initializeApp();
+      }).catch((err) => {
+        console.log('LIFF Initialization failed ', err);
+      });
+    }
+
+    function sendText(text) {
+      liff.sendMessages([{
+        'type': 'text',
+        'text': text
+      }]).then(function () {
+        liff.closeWindow();
+      }).catch(function (error) {
+        window.alert('Failed to send message ' + error);
+      });
+    }
+
+    function submitForm() {
+      Swal.fire({
+        title: '送信確認',
+        text: '本当に送信しますか？',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '送信',
+        cancelButtonText: 'キャンセル'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const busyo = $('input[name="busyo"]').val();
+          const name = $('select[name="name"]').val();
+          const maker = $('input[name="maker"]').val();
+          const syohin = $('input[name="syohin"]').val();
+          const katasiki = $('input[name="katasiki"]').val();
+          const kiban = $('input[name="kiban"]').val();
+          const buhin = $('input[name="buhin"]').val();
+          const syoujyou = $('input[name="syoujyou"]').val();
+          const mitsumori = $('input[name="mitsumori"]:checked').val();
+          const genba = $('input[name="genba"]').val();
+          const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+          const gazouInput = document.getElementById('gazou');
+          const gazou = gazouInput.files[0];
+          
+          const formData = new FormData();
+          formData.append('busyo', busyo);
+          formData.append('name', name);
+          formData.append('maker', maker);
+          formData.append('syohin', syohin);
+          formData.append('katasiki', katasiki);
+          formData.append('kiban', kiban);
+          formData.append('buhin', buhin);
+          formData.append('syoujyou', syoujyou);
+          formData.append('mitsumori', mitsumori);
+          formData.append('genba', genba);
+          formData.append('bikou', bikou);
+          formData.append('gazou', gazou);
+
+          $.ajax({
+            type: 'POST',
+            url: 'https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5',  // ファイルをアップロードするサーバー側のURLに置き換えてください
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+              sendText(msg);
+            },
+            error: function (error) {
+              console.log('Error:', error);
+            }
+          });
         }
-       
-     
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
-        
-
-
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-       
-
-        
-     
-        
-        $(function () {
-        $('form').submit(function (event) {
-            event.preventDefault();
-            Swal.fire({
-                title: '送信確認',
-                text: '本当に送信しますか？',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '送信',
-                cancelButtonText: 'キャンセル'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const busyo = $('input[name="busyo"]').val();
-                    const name = $('select[name="name"]').val();
-                    const maker = $('input[name="maker"]').val();
-                    const syohin = $('input[name="syohin"]').val();
-                    const katasiki = $('input[name="katasiki"]').val();
-                    const kiban = $('input[name="kiban"]').val();
-                    const buhin = $('input[name="buhin"]').val();
-                    const syoujyou = $('input[name="syoujyou"]').val();
-                    const mitsumori = $('input[name="mitsumori"]:checked').val();
-                    const genba = $('input[name="genba"]').val();
-                    const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-                    const gazou = $('input[name="gazou"]').val();
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
-                    sendText(msg);
-                }
-            });
-        });
-    });
-
-
-        
-
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>
