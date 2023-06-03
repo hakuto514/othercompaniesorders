@@ -12,10 +12,7 @@
 <body>
     <p class="text-center">【支援依頼フォーム】</p>
     <p class="text-center">下記空欄を入力をして、送信してください</p>
-   
-   
-        <form class="w-75 mx-auto" onsubmit="return false;">
-    
+    <form class="w-75 mx-auto" onsubmit="submitForm(); return false;">
         <p class="mt-3">部署</p>
         <div>
             <input class="form-control" name="busyo" placeholder="例）鳥取" required>                                                                                                                      
@@ -79,16 +76,17 @@
 </textarea>
 　　　　</div> 
         
- <p class="mt-3">画像</p>
-<div>
-  <input type="file" id="image-input" name="image" accept="image/*">
-</div>
+        <p class="mt-3">画像（あればURLを貼り付け）</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
+        </div>
+        
+      
         
 
 
        
-       
-             <input type="submit" class="mt-4 btn btn-primary" value="送信する" onclick="submitForm()">
+        <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -132,43 +130,6 @@
         const params = (new URL(document.location)).searchParams;
         const key = params.get('key');
        
-       
-       function sendImageToDrive(imageUrl) {
-  // 画像を取得
-  const imageResponse = UrlFetchApp.fetch(imageUrl, {
-    headers: {
-      Authorization: "Bearer " + ACCESS_TOKEN,
-    },
-    muteHttpExceptions: true,
-  });
-
-  if (imageResponse.getResponseCode() === 200) {
-    const imageBlob = imageResponse.getBlob();
-
-    // 保存するファイル名を採番
-    const folder = DriveApp.getFolderById(FOLDER_ID);
-    const existingFiles = folder.getFiles();
-    let fileCount = 0;
-
-    while (existingFiles.hasNext()) {
-      existingFiles.next();
-      fileCount++;
-    }
-
-    const fileName = "LINE_image" + (fileCount + 1) + ".jpg";
-
-    // Google Driveフォルダに画像を保存
-    const file = folder.createFile(imageBlob.setName(fileName));
-
-    // 保存した画像のURLを取得
-    const imageUrlDrive = file.getUrl();
-
-    return imageUrlDrive;
-  } else {
-    console.error("Failed to fetch image:", imageResponse.getContentText());
-    return null;
-  }
-}
 
         
      
@@ -197,31 +158,14 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
-                  // 画像情報を取得します
-const imageFile = document.getElementById('image-input').files[0];
-if (imageFile) {
-  // 画像が選択されている場合は、画像をGoogle Driveにアップロードします
-  const imageUrlDrive = sendImageToDrive(imageFile);
-  if (imageUrlDrive) {
-    // 画像がアップロードされた場合は、URLをメッセージに追加します
-    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n画像URL: ${imageUrlDrive}`;
-    sendText(msg);
-  } else {
-    // 画像のアップロードに失敗した場合は、エラーメッセージを表示します
-    Swal.fire('エラー', '画像のアップロードに失敗しました', 'error');
-  }
-} else {
-  // 画像が選択されていない場合は、そのままメッセージを送信します
-  const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-  sendText(msg);
-}
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
+                    sendText(msg);
+                }
             });
         });
     });
 
-// ページのリロードを防ぐために、return false; を追加
-            return false;
-            }
+
         
 
     </script>
