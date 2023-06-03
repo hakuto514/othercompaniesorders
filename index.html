@@ -193,15 +193,24 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
-                      // 画像情報を取得します
-  const imageFile = document.getElementById('image-input').files[0];
-  if (imageFile) {
-    // 画像が選択されている場合は、画像をGoogle Driveにアップロードします
-    sendImageToDrive(imageFile);
+                  // 画像情報を取得します
+const imageFile = document.getElementById('image-input').files[0];
+if (imageFile) {
+  // 画像が選択されている場合は、画像をGoogle Driveにアップロードします
+  const imageUrlDrive = sendImageToDrive(imageFile);
+  if (imageUrlDrive) {
+    // 画像がアップロードされた場合は、URLをメッセージに追加します
+    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n画像URL: ${imageUrlDrive}`;
+    sendText(msg);
+  } else {
+    // 画像のアップロードに失敗した場合は、エラーメッセージを表示します
+    Swal.fire('エラー', '画像のアップロードに失敗しました', 'error');
   }
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
-                    sendText(msg);
-                }
+} else {
+  // 画像が選択されていない場合は、そのままメッセージを送信します
+  const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
+  sendText(msg);
+}
             });
         });
     });
