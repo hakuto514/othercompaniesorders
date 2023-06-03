@@ -15,37 +15,37 @@
     <form class="w-75 mx-auto" onsubmit="submitForm(); return false;">
         <p class="mt-3">部署</p>
         <div>
-            <input class="form-control" name="busyo" placeholder="例）鳥取" required>                                                                                                                      
+            <input class="form-control" name="busyo" placeholder="例）鳥取" required>
         </div>
         <p class="mt-3">氏名</p>
         <div>
-              <select class="form-control w-100 mt-1" name="name" required>
-                 <option value="">選択してください</option>
-                 <option value="高橋大輔">高橋大輔</option>
-                 <option value="重親亮介">重親亮介</option>
-                 <option value="山澤亮太">山澤亮太</option>
-                 <option value="牧田寛之">牧田寛之</option>
-                 <option value="小椋政継">小椋政継</option>
-                 <option value="土岐大輔">土岐大輔</option>
-              </select>
+            <select class="form-control w-100 mt-1" name="name" required>
+                <option value="">選択してください</option>
+                <option value="高橋大輔">高橋大輔</option>
+                <option value="重親亮介">重親亮介</option>
+                <option value="山澤亮太">山澤亮太</option>
+                <option value="牧田寛之">牧田寛之</option>
+                <option value="小椋政継">小椋政継</option>
+                <option value="土岐大輔">土岐大輔</option>
+            </select>
         </div>
-        
+
         <p class="mt-3">メーカー</p>
         <div>
-            <input class="form-control w-100 mt-1" name="maker" placeholder="例）サンヨー" required>                                                                                                                      
+            <input class="form-control w-100 mt-1" name="maker" placeholder="例）サンヨー" required>
         </div>
         <p class="mt-3">商品</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="syohin" placeholder="例）冷蔵庫" required>                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="syohin" placeholder="例）冷蔵庫" required>
         </div>
-        
+
         <p class="mt-3">型式</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="katasiki" placeholder="例）SRR－F1561C2A" required>                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="katasiki" placeholder="例）SRR－F1561C2A" required>
         </div>
         <p class="mt-3">機番（不明の場合は空白で可）</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="kiban" placeholder="A012345" >                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="kiban" placeholder="A012345">
         </div>
         <p class="mt-5">以下は必要な部品名を入力してください。</p>
         <p class="mt-n1">展開図などが必要であれば「展開図希望」などと入力してください。</p>
@@ -54,37 +54,30 @@
         </div>
         <p class="mt-3">症状（部品注文の場合は空白で可）</p>
         <div>
-            <input class="form-control w-100 mt-1 mb-2" name="syoujyou" placeholder="例）異音がする" >                                                                                                                     
+            <input class="form-control w-100 mt-1 mb-2" name="syoujyou" placeholder="例）異音がする">
         </div>
-       <div>
-  <p class="mt-5" required>修理見積もり作成について</p>
-<div class="mb-3">
-    <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
-    <input id="radio-b" type="radio" name="mitsumori" value="部品価格のみ知りたい"><label for="radio-b">部品価格のみ知りたい</label>
-</div>
-           
-           <p class="mt-3">現場名</p>
         <div>
-            <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>                                                                                                                      
+            <p class="mt-5" required>修理見積もり作成について</p>
+            <div class="mb-3">
+                <input id="radio-a" type="radio" name="mitsumori" value="必要" checked><label for="radio-a">必要</label>
+                <input id="radio-b" type="radio" name="mitsumori" value="部品価格のみ知りたい"><label for="radio-b">部品価格のみ知りたい</label>
+            </div>
+
+            <p class="mt-3">現場名</p>
+            <div>
+                <input class="form-control w-100 mt-1" name="genba" placeholder="例）居酒屋よしまつ" required>
+            </div>
         </div>
-           
-          
-   
-       <p class="mt-5 mb-0">備考欄（空欄でも可）</p>    
-       <div>
-  　　　　<textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1"  <input type="text" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」">
-</textarea>
-　　　　</div> 
-        
-         <p class="mt-3">画像アップロード</p>
-    <div>
-      <input class="form-control w-100 mt-1" type="file" name="gazou" id="gazou" required>
-    </div>
-        
-        
+        <p class="mt-5 mb-0">備考欄（空欄でも可）</p>
+        <div>
+            <textarea class="form-control h-25" name="bikou" id="exampleFormControlTextarea1" placeholder="部品の詳細な仕様はこちらへ。サービス支援からの返信希望アドレスなどもコチラから入力。例えば「この返信はhoshizaki-xxx@example.comまでお願いします。」"></textarea>
+        </div>
 
+        <p class="mt-3">画像のアップロード（任意）</p>
+        <div>
+            <input type="file" name="gazou" accept="image/*">
+        </div>
 
-       
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
@@ -96,87 +89,117 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
 
-    $(document).ready(function () {
-      const liffId = "1661066964-VDmMrPNX";
-      initializeLiff(liffId);
-    })
+        $(document).ready(function () {
+            const liffId = "1661066964-VDmMrPNX";
+            initializeLiff(liffId);
+        })
 
-    function initializeLiff(liffId) {
-      liff.init({
-        liffId: liffId
-      }).then(() => {
-        initializeApp();
-      }).catch((err) => {
-        console.log('LIFF Initialization failed ', err);
-      });
-    }
-
-    function sendText(text) {
-      liff.sendMessages([{
-        'type': 'text',
-        'text': text
-      }]).then(function () {
-        liff.closeWindow();
-      }).catch(function (error) {
-        window.alert('Failed to send message ' + error);
-      });
-    }
-
-    function submitForm() {
-      Swal.fire({
-        title: '送信確認',
-        text: '本当に送信しますか？',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '送信',
-        cancelButtonText: 'キャンセル'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const busyo = $('input[name="busyo"]').val();
-          const name = $('select[name="name"]').val();
-          const maker = $('input[name="maker"]').val();
-          const syohin = $('input[name="syohin"]').val();
-          const katasiki = $('input[name="katasiki"]').val();
-          const kiban = $('input[name="kiban"]').val();
-          const buhin = $('input[name="buhin"]').val();
-          const syoujyou = $('input[name="syoujyou"]').val();
-          const mitsumori = $('input[name="mitsumori"]:checked').val();
-          const genba = $('input[name="genba"]').val();
-          const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
-          const gazouInput = document.getElementById('gazou');
-          const gazou = gazouInput.files[0];
-          
-          const formData = new FormData();
-          formData.append('busyo', busyo);
-          formData.append('name', name);
-          formData.append('maker', maker);
-          formData.append('syohin', syohin);
-          formData.append('katasiki', katasiki);
-          formData.append('kiban', kiban);
-          formData.append('buhin', buhin);
-          formData.append('syoujyou', syoujyou);
-          formData.append('mitsumori', mitsumori);
-          formData.append('genba', genba);
-          formData.append('bikou', bikou);
-          formData.append('gazou', gazou);
-
-          $.ajax({
-            type: 'POST',
-            url: 'https://drive.google.com/drive/u/0/folders/1YozMI7lC97vKdhK4nVo--uASXmFRPvu5',  // ファイルをアップロードするサーバー側のURLに置き換えてください
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-              const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}`;
-              sendText(msg);
-            },
-            error: function (error) {
-              console.log('Error:', error);
-            }
-          });
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
         }
-      });
-    }
-  </script>
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: '送信確認',
+                    text: '本当に送信しますか？',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '送信',
+                    cancelButtonText: 'キャンセル'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const busyo = $('input[name="busyo"]').val();
+                        const name = $('select[name="name"]').val();
+                        const maker = $('input[name="maker"]').val();
+                        const syohin = $('input[name="syohin"]').val();
+                        const katasiki = $('input[name="katasiki"]').val();
+                        const kiban = $('input[name="kiban"]').val();
+                        const buhin = $('input[name="buhin"]').val();
+                        const syoujyou = $('input[name="syoujyou"]').val();
+                        const mitsumori = $('input[name="mitsumori"]:checked').val();
+                        const genba = $('input[name="genba"]').val();
+                        const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
+                        const gazou = $('input[name="gazou"]').val();
+                        const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
+
+                        // 画像の取得
+                        const fileInput = $('input[name="gazou"]')[0];
+                        const file = fileInput.files[0];
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        // Google Driveに画像をアップロード
+                        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                            method: 'POST',
+                            headers: {
+                                Authorization: 'Bearer ' + key,
+                            },
+                            body: formData,
+                        }).then((response) => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Failed to upload image');
+                            }
+                        }).then((data) => {
+                            const fileId = data.id;
+
+                            // Google Driveのフォルダに画像を移動
+                            fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?addParents=[1YozMI7lC97vKdhK4nVo--uASXmFRPvu5]`, {
+                                method: 'PATCH',
+                                headers: {
+                                    Authorization: 'Bearer ' + key,
+                                    'Content-Type': 'application/json',
+                                },
+                            }).then((response) => {
+                                if (response.ok) {
+                                    // 画像の移動が成功したら、テキストメッセージを送信
+                                    sendText(msg);
+                                } else {
+                                    throw new Error('Failed to move image');
+                                }
+                            }).catch((error) => {
+                                console.error(error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'エラー',
+                                    text: '画像のアップロードと移動に失敗しました。',
+                                });
+                            });
+                        }).catch((error) => {
+                            console.error(error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'エラー',
+                                text: '画像のアップロードに失敗しました。',
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
