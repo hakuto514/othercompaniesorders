@@ -19,32 +19,21 @@
         </div>
         <p class="mt-3">氏名</p>
         <div>
-              <select class="form-control w-100 mt-1" name="name" id="stuff" onchange="showEmail()" required>
+              <select class="form-control w-100 mt-1" name="name" onchange="updateEmail(this.value)" required>
                  <option value="">選択してください</option>
-                 <option value="A">高橋大輔</option>
-                 <option value="B">重親亮介</option>
-                 <option value="C">山澤亮太</option>
-                 <option value="D">牧田寛之</option>
-                 <option value="E">小椋政継</option>
-                 <option value="G">土岐大輔</option>
+                 <option value="高橋大輔">高橋大輔</option>
+                 <option value="重親亮介">重親亮介</option>
+                 <option value="山澤亮太">山澤亮太</option>
+                 <option value="牧田寛之">牧田寛之</option>
+                 <option value="小椋政継">小椋政継</option>
+                 <option value="土岐大輔">土岐大輔</option>
               </select>
         </div>
         
         <p class="mt-3">メールアドレス</p>
-       <div id="emailA" style="display: none;">
-    <label for="emailA">A君のメールアドレス:</label>
-    <input class="form-control w-100 mt-1" type="email" id="emailA" name="emailA">
-</div>
-
-<div id="emailB" style="display: none;">
-    <label for="emailB">B君のメールアドレス:</label>
-    <input class="form-control w-100 mt-1" type="email" id="emailB" name="emailB">
-</div>
-
-<div id="emailC" style="display: none;">
-    <label for="emailC">C君のメールアドレス:</label>
-    <input class="form-control w-100 mt-1" type="email" id="emailC" name="emailC">
-</div>
+        <div>
+            <input class="form-control w-100 mt-1" id="email" name="email" readonly required>
+        </div>
         
         <p class="mt-3">メーカー</p>
         <div>
@@ -97,10 +86,7 @@
             <input class="form-control w-100 mt-1" name="gazou" placeholder="タイムラインで取得したURL" >                                                                                                                      
         </div>
         
-        
-       
-       
-       
+ 
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
     </form>
 
@@ -112,29 +98,24 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
        
-    function showEmail() {
-  var person = document.getElementById("stuff").value;
-  var emailA = document.getElementById("emailA");
-  var emailB = document.getElementById("emailB");
-  var emailC = document.getElementById("emailC");
-  // 他の人物に関するメールアドレスの要素も取得します
-
-  emailA.style.display = "none";
-  emailB.style.display = "none";
-  emailC.style.display = "none";
-  // 他の人物に関するメールアドレスの要素も非表示にします
-
-  if (person.value === "A") {
-    emailA.style.display = "block";
-  } else if (person.value === "B") {
-    emailB.style.display = "block";
-  } else if (person.value === "C") {
-    emailC.style.display = "block";
-  }
-  // 他の人物に関する条件分岐も追加します
-}
-
-       
+       function updateEmail(name) {
+            const emailInput = document.getElementById('email');
+            if (name === '高橋大輔') {
+                emailInput.value = 'takahashi@example.com';
+            } else if (name === '重親亮介') {
+                emailInput.value = 'shigechika@example.com';
+            } else if (name === '山澤亮太') {
+                emailInput.value = 'yamazawa@example.com';
+            } else if (name === '牧田寛之') {
+                emailInput.value = 'makita@example.com';
+            } else if (name === '小椋政継') {
+                emailInput.value = 'ogura@example.com';
+            } else if (name === '土岐大輔') {
+                emailInput.value = 'toki@example.com';
+            } else {
+                emailInput.value = '';
+            }
+        }
 
         $(document).ready(function () {
             const liffId = "1661066964-VDmMrPNX";
@@ -150,8 +131,6 @@
                 console.log('LIFF Initialization failed ', err);
             });
         }
-       
-       
        
      
 
@@ -199,8 +178,7 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
-                    const mail = $('label[name="mail"]').val();
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}\n${mail}`;
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
                     sendText(msg);
                 }
             });
