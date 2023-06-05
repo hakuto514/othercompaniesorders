@@ -154,7 +154,7 @@
         
      
         
-      $(function () {
+     $(function () {
     $('form').submit(function (event) {
         event.preventDefault();
         Swal.fire({
@@ -194,12 +194,16 @@
                 const gazouLabel = '【画像】';
                 const emailLabel = '【メールアドレス】';
                 
-                const msg = `${busyoLabel}${busyo}\n${nameLabel}${name}\n${makerLabel}${maker}\n${syohinLabel}${syohin}\n${katasikiLabel}${katasiki}\n${kibanLabel}${kiban}\n${buhinLabel}${buhin}\n${syoujyouLabel}${syoujyou}\n${mitsumoriLabel}${mitsumori}\n${genbaLabel}${genba}\n${bikouLabel}${bikou}\n${gazouLabel}${gazou}\n${emailLabel}${email}`;
-                sendText(msg);
+                const msg = `${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}\n${email}`;
+                
+                const now = new Date();
+                const data = [now, ...msg.split('\n')];
+                listSheet.appendRow(data);
             }
         });
     });
 });
+
 
 
 
