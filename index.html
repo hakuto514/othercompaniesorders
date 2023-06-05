@@ -21,18 +21,29 @@
         <div>
               <select class="form-control w-100 mt-1" name="name" id="stuff" onchange="showEmailAddress()" required>
                  <option value="">選択してください</option>
-                 <option value="高橋大輔">高橋大輔</option>
-                 <option value="重親亮介">重親亮介</option>
-                 <option value="山澤亮太">山澤亮太</option>
-                 <option value="牧田寛之">牧田寛之</option>
-                 <option value="小椋政継">小椋政継</option>
-                 <option value="土岐大輔">土岐大輔</option>
+                 <option value="A">高橋大輔</option>
+                 <option value="B">重親亮介</option>
+                 <option value="C">山澤亮太</option>
+                 <option value="D">牧田寛之</option>
+                 <option value="E">小椋政継</option>
+                 <option value="G">土岐大輔</option>
               </select>
         </div>
         
-        <div id="emailAddress" style="display: none;">
-        <label for="email" name="mail">メールアドレス:</label>
-        <span id="email"></span>
+        <div id="emailA" style="display: none;">
+  　　　　　　<label for="email">A君のメールアドレス:</label>
+  　　　　　　<input type="email" id="email" name="email">
+　　　　 </div>
+
+       <div id="emailB" style="display: none;">
+            <label for="email">B君のメールアドレス:</label>
+            <input type="email" id="email" name="email">
+       </div>
+        
+        <div id="emailC" style="display: none;">
+            <label for="email">C君のメールアドレス:</label>
+            <input type="email" id="email" name="email">
+       </div>
         
         <p class="mt-3">メーカー</p>
         <div>
@@ -100,25 +111,26 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
        
-       var emailAddresses = {
-  高橋大輔: "takahashi@example.com",
-  重親亮介: "omoso@example.com",
-  // 他の選択肢とメールアドレスを追加
-};
+    function showEmail() {
+  var person = document.getElementById("person");
+  var emailA = document.getElementById("emailA");
+  var emailB = document.getElementById("emailB");
+  var emailC = document.getElementById("emailC");
+  // 他の人物に関するメールアドレスの要素も取得します
 
-function showEmailAddress() {
-  var students = document.getElementById("stuff");
-  var emailAddress = document.getElementById("email");
+  emailA.style.display = "none";
+  emailB.style.display = "none";
+  emailC.style.display = "none";
+  // 他の人物に関するメールアドレスの要素も非表示にします
 
-  var selectedStudent = students.value;
-  var selectedEmailAddress = emailAddresses[selectedStudent];
-
-  if (selectedEmailAddress) {
-    emailAddress.textContent = selectedEmailAddress;
-    document.getElementById("emailAddress").style.display = "block";
-  } else {
-    document.getElementById("emailAddress").style.display = "none";
+  if (person.value === "A") {
+    emailA.style.display = "block";
+  } else if (person.value === "B") {
+    emailB.style.display = "block";
+  } else if (person.value === "C") {
+    emailC.style.display = "block";
   }
+  // 他の人物に関する条件分岐も追加します
 }
 
        
@@ -186,7 +198,7 @@ function showEmailAddress() {
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
-                    const mail = $('label[name="mail"]').text();
+                    const mail = $('label[name="mail"]').val();
                     const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}\n${mail}`;
                     sendText(msg);
                 }
