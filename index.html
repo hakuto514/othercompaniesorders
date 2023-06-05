@@ -85,6 +85,7 @@
         <div>
             <input class="form-control w-100 mt-1" name="gazou" placeholder="画像を投稿して取得できるURLの部分" >                                                                                                                      
         </div>
+        <div id="imagePreview"></div>
         
  
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
@@ -97,6 +98,16 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
+       
+       function showImagePreview() {
+    const imageUrl = $('input[name="gazou"]').val();
+    if (imageUrl !== '') {
+        $('#imagePreview').html(`<img src="${imageUrl}" alt="Image Preview" width="200">`);
+    } else {
+        $('#imagePreview').html('');
+    }
+}
+
        
        function updateEmail(name) {
             const emailInput = document.getElementById('email');
@@ -186,11 +197,7 @@ $(function () {
     });
 });
        
-       function showPreview() {
-  var imageUrl = document.getElementById("imageInput").value;
-  var preview = document.getElementById("imagePreview");
-  preview.src = imageUrl;
-}
+      
 
 
 
