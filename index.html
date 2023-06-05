@@ -82,10 +82,13 @@
 　　　　</div> 
         
         <p class="mt-3">画像（あればURLを貼り付け）</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="gazou" placeholder="画像を投稿して取得できるURLの部分" >                                                                                                                      
-        </div>
-        <div id="imagePreview"></div>
+        
+        <!-- 画像URLを貼り付けるinput要素 -->
+<input type="text" id="image-url" placeholder="画像を投稿して取得できるURLの部分">
+
+<!-- 画像のプレビューを表示するimg要素 -->
+<img id="image-preview" src="" alt="Image Preview">
+
         
  
         <input type="submit" class="mt-4 btn btn-primary" value="送信する">
@@ -99,14 +102,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script>
        
-       function showImagePreview() {
-    const imageUrl = $('input[name="gazou"]').val();
-    if (imageUrl !== '') {
-        $('#imagePreview').html(`<img src="${imageUrl}" alt="Image Preview" width="200">`);
-    } else {
-        $('#imagePreview').html('');
-    }
-}
+     // input要素の値が変更されたときに、画像のプレビューを更新する関数
+  function updateImagePreview() {
+    const imageUrl = document.getElementById('image-url').value;
+    const imagePreview = document.getElementById('image-preview');
+    imagePreview.src = imageUrl;
+  }
+
+  // input要素の値が変更されたときにupdateImagePreview関数を呼び出すイベントリスナーを追加
+  document.getElementById('image-url').addEventListener('input', updateImagePreview);
 
        
        function updateEmail(name) {
