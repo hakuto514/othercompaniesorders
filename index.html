@@ -154,7 +154,7 @@
         
      
         
-       $(function () {
+      $(function () {
     $('form').submit(function (event) {
         event.preventDefault();
         Swal.fire({
@@ -166,46 +166,35 @@
             cancelButtonText: 'キャンセル'
         }).then((result) => {
             if (result.isConfirmed) {
-                const busyoLabel = '部署';
                 const busyo = $('input[name="busyo"]').val();
-                
-                const nameLabel = '氏名';
                 const name = $('select[name="name"]').val();
-                
-                const makerLabel = 'メーカー';
                 const maker = $('input[name="maker"]').val();
-                
-                const syohinLabel = '商品';
                 const syohin = $('input[name="syohin"]').val();
-                
-                const katasikiLabel = '型式';
                 const katasiki = $('input[name="katasiki"]').val();
-                
-                const kibanLabel = '機番';
                 const kiban = $('input[name="kiban"]').val() || "入力がありません";
-                
-                const buhinLabel = '部品名';
                 const buhin = $('input[name="buhin"]').val();
-                
-                const syoujyouLabel = '症状';
                 const syoujyou = $('input[name="syoujyou"]').val() || "入力がありません";
-                
-                const mitsumoriLabel = '修理見積もり作成について';
                 const mitsumori = $('input[name="mitsumori"]:checked').val();
-                
-                const genbaLabel = '現場名';
                 const genba = $('input[name="genba"]').val();
-                
-                const bikouLabel = '備考欄';
                 const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　") || "特にありません";
-                
-                const gazouLabel = '画像';
                 const gazou = $('input[name="gazou"]').val() || "ありません";
-                
-                const emailLabel = 'メールアドレス';
                 const email = $('input[name="email"]').val();
                 
-                const msg = `【送信内容】\n${busyoLabel}: ${busyo}\n${nameLabel}: ${name}\n${makerLabel}: ${maker}\n${syohinLabel}: ${syohin}\n${katasikiLabel}: ${katasiki}\n${kibanLabel}: ${kiban}\n${buhinLabel}: ${buhin}\n${syoujyouLabel}: ${syoujyou}\n${mitsumoriLabel}: ${mitsumori}\n${genbaLabel}: ${genba}\n${bikouLabel}: ${bikou}\n${gazouLabel}: ${gazou}\n${emailLabel}: ${email}`;
+                const busyoLabel = '【部署】';
+                const nameLabel = '【氏名】';
+                const makerLabel = '【メーカー】';
+                const syohinLabel = '【商品】';
+                const katasikiLabel = '【型式】';
+                const kibanLabel = '【機番】';
+                const buhinLabel = '【部品名】';
+                const syoujyouLabel = '【症状】';
+                const mitsumoriLabel = '【修理見積もり作成について】';
+                const genbaLabel = '【現場名】';
+                const bikouLabel = '【備考欄】';
+                const gazouLabel = '【画像】';
+                const emailLabel = '【メールアドレス】';
+                
+                const msg = `${busyoLabel}${busyo}\n${nameLabel}${name}\n${makerLabel}${maker}\n${syohinLabel}${syohin}\n${katasikiLabel}${katasiki}\n${kibanLabel}${kiban}\n${buhinLabel}${buhin}\n${syoujyouLabel}${syoujyou}\n${mitsumoriLabel}${mitsumori}\n${genbaLabel}${genba}\n${bikouLabel}${bikou}\n${gazouLabel}${gazou}\n${emailLabel}${email}`;
                 sendText(msg);
             }
         });
