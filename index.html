@@ -178,7 +178,8 @@
                     const genba = $('input[name="genba"]').val();
                     const bikou = $('textarea[name="bikou"]').val().replaceAll("\n", "　");
                     const gazou = $('input[name="gazou"]').val();
-                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}`;
+                    const email = $('input[name="email"]').val();
+                    const msg = `【送信内容】\n${busyo}\n${name}\n${maker}\n${syohin}\n${katasiki}\n${kiban}\n${buhin}\n${syoujyou}\n${mitsumori}\n${genba}\n${bikou}\n${gazou}\n${email}`;
                     sendText(msg);
                 }
             });
